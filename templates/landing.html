@@ -1,0 +1,635 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartOps — Enterprise Multi-Tenant SaaS Platform</title>
+  <meta name="description" content="Production-ready B2B SaaS platform featuring request-isolated multi-tenancy, async Celery LLM tasks, and REST API layer." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+  <!-- Tailwind CSS Engine & External Configurations -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="{% static 'js/tailwind-config.js' %}"></script>
+  <link href="{% static 'css/theme.css' %}" rel="stylesheet" />
+
+  <!-- Alpine.js & Platform JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="{% static 'js/main.js' %}"></script>
+</head>
+
+<body class="h-full flex flex-col min-h-screen bg-grid-texture hero-spotlight antialiased" x-data="{ mobileMenuOpen: false, activeTab: 'auth', copiedMsg: '' }">
+
+  <!-- ── Navigation Header ─────────────────────────────────────────── -->
+  <header class="sticky top-0 z-50 bg-surface-0/80 backdrop-blur-md border-b border-surface-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <!-- Brand Logo -->
+        <a href="/" class="flex items-center gap-2.5 group">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30 group-hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined text-[20px]">electric_bolt</span>
+          </div>
+          <span class="text-base font-bold tracking-tight text-white">SmartOps</span>
+          <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full font-medium">Enterprise Engine</span>
+        </a>
+
+        <!-- Nav Links -->
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="#demo-credentials" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            Demo Credentials
+          </a>
+          <a href="#problem-solution" class="text-xs font-medium text-slate-400 hover:text-white transition-colors">Overview</a>
+          <a href="#lifecycle" class="text-xs font-medium text-slate-400 hover:text-white transition-colors">Request Flow</a>
+          <a href="#stack" class="text-xs font-medium text-slate-400 hover:text-white transition-colors">Tech Stack</a>
+          <a href="#sandbox" class="text-xs font-medium text-slate-400 hover:text-white transition-colors">API Sandbox</a>
+          <a href="#security" class="text-xs font-medium text-slate-400 hover:text-white transition-colors">Security</a>
+          <a href="#roadmap" class="text-xs font-medium text-slate-400 hover:text-white transition-colors">Roadmap</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/admin/" target="_blank" class="px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-surface-1 border border-surface-border hover:border-slate-600 rounded-lg transition-all flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px] text-indigo-400">admin_panel_settings</span>
+            Unfold Admin
+          </a>
+          <a href="{% url 'dashboard:home' %}" class="px-4 py-1.5 text-xs font-semibold text-slate-900 bg-white hover:bg-slate-100 rounded-lg shadow-sm transition-all flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">space_dashboard</span>
+            {% if request.user.is_authenticated %}Dashboard{% else %}Sign In{% endif %}
+          </a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-slate-400 hover:text-white">
+          <span class="material-symbols-outlined" x-text="mobileMenuOpen ? 'close' : 'menu'">menu</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div x-show="mobileMenuOpen" x-cloak class="md:hidden bg-surface-1 border-b border-surface-border px-4 py-4 space-y-3">
+      <a href="#demo-credentials" @click="mobileMenuOpen = false" class="block text-xs text-emerald-400 font-semibold py-1">🔑 Demo Credentials</a>
+      <a href="#problem-solution" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Overview</a>
+      <a href="#lifecycle" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Request Flow</a>
+      <a href="#stack" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Tech Stack</a>
+      <a href="#sandbox" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">API Sandbox</a>
+      <a href="#security" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Security</a>
+      <a href="#roadmap" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Roadmap</a>
+      <div class="pt-3 border-t border-surface-border flex flex-col gap-2">
+        <a href="/admin/" class="w-full text-center py-2 text-xs font-semibold text-slate-300 bg-surface-2 rounded-lg border border-surface-border">Admin Portal</a>
+        <a href="{% url 'dashboard:home' %}" class="w-full text-center py-2 text-xs font-semibold text-slate-900 bg-white rounded-lg">
+          {% if request.user.is_authenticated %}Dashboard{% else %}Sign In{% endif %}
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── 1. Hero Section ─────────────────────────────────────────────── -->
+  <section class="relative pt-16 pb-20 md:pt-24 md:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center flex-1">
+
+    <!-- Status Badge -->
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface-1 border border-surface-border text-xs font-mono text-slate-300 mb-8">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="text-emerald-400 font-semibold">PRODUCTION ENGINE OPERATIONAL</span>
+      <span class="text-slate-600">|</span>
+      <span>Django 5.2 LTS + Celery</span>
+    </div>
+
+    <!-- Main Headline -->
+    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight gradient-heading max-w-5xl mx-auto leading-[1.1]">
+      Scalable Architecture for Modern B2B SaaS
+    </h1>
+
+    <p class="mt-6 text-base sm:text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed">
+      SmartOps resolves complex enterprise SaaS patterns out-of-the-box: rigid multi-tenant data isolation, event-driven async LLM task processing, and cryptographically hashed programmatic API keys.
+    </p>
+
+    <!-- Hero Actions -->
+    <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href="{% url 'dashboard:home' %}" class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-slate-900 bg-white hover:bg-slate-100 rounded-lg shadow-md transition-all flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">space_dashboard</span>
+        Explore Web Dashboard
+      </a>
+      <a href="#demo-credentials" class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 rounded-lg transition-all flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">key</span>
+        View Demo Credentials
+      </a>
+      <a href="/admin/" target="_blank" class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-slate-200 bg-surface-1 hover:bg-surface-2 border border-surface-border hover:border-slate-600 rounded-lg transition-all flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-[18px] text-indigo-400">admin_panel_settings</span>
+        Open Django Unfold Admin
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ── 2. Telemetry Banner ─────────────────────────────────────────── -->
+  <section id="metrics" class="py-10 border-y border-surface-border bg-surface-1/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+        <div class="px-4 py-2 border-l-2 border-indigo-500">
+          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Active Workspaces</p>
+          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_workspaces|default:0 }}</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">Isolated Tenants</p>
+        </div>
+
+        <div class="px-4 py-2 border-l-2 border-purple-500">
+          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">AI Tokens Processed</p>
+          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_tokens|default:0 }}</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">Async Celery Tasks</p>
+        </div>
+
+        <div class="px-4 py-2 border-l-2 border-emerald-500">
+          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Active API Keys</p>
+          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_api_keys|default:0 }}</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">PBKDF2 Hashed</p>
+        </div>
+
+        <div class="px-4 py-2 border-l-2 border-amber-500">
+          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Registered Users</p>
+          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_users|default:0 }}</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">UUID Accounts</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3. Live Demo & Test Credentials Section ─────────────────────── -->
+  <section id="demo-credentials" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-surface-border">
+
+    <div class="text-center mb-12">
+      <span class="text-[11px] font-mono uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Instant Platform Exploration</span>
+      <h2 class="text-3xl font-bold text-white mt-3">Demo Accounts &amp; Exploration Guide</h2>
+      <p class="text-xs text-slate-400 mt-1 max-w-xl mx-auto">Use these pre-seeded credentials to explore the admin console and client dashboard instantly.</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div x-show="copiedMsg" x-cloak class="mb-6 p-3 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-mono text-center rounded-lg max-w-md mx-auto">
+      <span x-text="copiedMsg"></span>
+    </div>
+
+    <!-- Account Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+      {% for acc in demo_accounts %}
+      <div class="card-surface p-6 rounded-xl border border-surface-border hover:border-slate-600 transition-all flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono font-semibold uppercase px-2.5 py-0.5 rounded bg-{{ acc.color }}-500/10 text-{{ acc.color }}-400 border border-{{ acc.color }}-500/20">
+              {{ acc.role }}
+            </span>
+            <span class="material-symbols-outlined text-[18px] text-slate-500">verified_user</span>
+          </div>
+
+          <div class="space-y-2 mb-4">
+            <div>
+              <p class="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Email Address</p>
+              <div class="flex items-center justify-between bg-surface-0 px-3 py-1.5 rounded border border-surface-border text-xs font-mono text-white mt-0.5">
+                <span class="truncate">{{ acc.email }}</span>
+                <button @click="navigator.clipboard.writeText('{{ acc.email }}'); copiedMsg = 'Copied email: {{ acc.email }}'; setTimeout(() => copiedMsg = '', 3000)" class="text-slate-400 hover:text-emerald-400 p-1">
+                  <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <p class="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Password</p>
+              <div class="flex items-center justify-between bg-surface-0 px-3 py-1.5 rounded border border-surface-border text-xs font-mono text-emerald-400 mt-0.5">
+                <span>{{ acc.password }}</span>
+                <button @click="navigator.clipboard.writeText('{{ acc.password }}'); copiedMsg = 'Copied password!'; setTimeout(() => copiedMsg = '', 3000)" class="text-slate-400 hover:text-emerald-400 p-1">
+                  <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-[11px] text-slate-400 font-sans">
+            <strong>Access:</strong> {{ acc.access }}
+          </p>
+        </div>
+
+        <div class="pt-4 mt-4 border-t border-surface-border flex items-center justify-between">
+          {% if 'Admin' in acc.role or 'Superadmin' in acc.role or 'Staff' in acc.role %}
+            <a href="/admin/" target="_blank" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+              Log in to Admin &rarr;
+            </a>
+          {% else %}
+            <a href="{% url 'dashboard:login' %}" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+              Log in to Dashboard &rarr;
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- Download & Seeder Info Footer -->
+    <div class="card-surface p-6 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 border border-surface-border">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+          <span class="material-symbols-outlined text-[22px]">description</span>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-white">Full Test Credentials Document (TEST_CREDENTIALS.txt)</h4>
+          <p class="text-xs text-slate-400 mt-0.5">View all 40+ seeded accounts, workspace mappings, and API quick-start endpoints.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" class="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-900 bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-all text-center flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">file_download</span>
+          View Full Credentials File
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── 4. Problem vs Solution Comparison Matrix ────────────────────── -->
+  <section id="problem-solution" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+    <div class="text-center mb-14">
+      <span class="text-[11px] font-mono uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Problem &amp; Solution</span>
+      <h2 class="text-3xl font-bold text-white mt-3">Architectural Principles</h2>
+      <p class="text-xs text-slate-400 mt-1 max-w-xl mx-auto">How SmartOps resolves classical SaaS bottlenecks and security vulnerabilities.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <!-- The Problem Card -->
+      <div class="card-border rounded-xl p-6 sm:p-8 border-red-500/20 relative overflow-hidden bg-red-950/10">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">
+            <span class="material-symbols-outlined text-[18px]">warning</span>
+          </div>
+          <h3 class="text-lg font-bold text-red-300">The B2B SaaS Problem Statement</h3>
+        </div>
+
+        <ul class="space-y-4 text-xs text-slate-300 font-sans">
+          <li class="flex items-start gap-3">
+            <span class="text-red-400 font-mono font-bold">01</span>
+            <div>
+              <strong class="text-white">Cross-Tenant Data Leaks:</strong>
+              <p class="text-slate-400 mt-0.5">In single-DB apps, an un-scoped ORM query can accidentally expose Client A's confidential data to Client B.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-red-400 font-mono font-bold">02</span>
+            <div>
+              <strong class="text-white">Synchronous Server Bottlenecks:</strong>
+              <p class="text-slate-400 mt-0.5">Invoking external AI APIs or complex reports directly on HTTP threads causes worker timeouts and degraded UX.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-red-400 font-mono font-bold">03</span>
+            <div>
+              <strong class="text-white">Sequential ID Enumeration:</strong>
+              <p class="text-slate-400 mt-0.5">Sequential integer primary keys (e.g. <code class="font-mono text-red-300">/orgs/5/</code>) allow attackers to easily scrape and count tenant records.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- The SmartOps Solution Card -->
+      <div class="card-border rounded-xl p-6 sm:p-8 border-emerald-500/20 relative overflow-hidden bg-emerald-950/10">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <span class="material-symbols-outlined text-[18px]">verified</span>
+          </div>
+          <h3 class="text-lg font-bold text-emerald-300">The SmartOps Enterprise Architecture</h3>
+        </div>
+
+        <ul class="space-y-4 text-xs text-slate-300 font-sans">
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-400 font-mono font-bold">01</span>
+            <div>
+              <strong class="text-white">Request-Isolated TenantMiddleware:</strong>
+              <p class="text-slate-400 mt-0.5">Interceptors validate <code class="font-mono text-emerald-300">X-Workspace-ID</code> and user roles on every request, scoping queries to <code class="font-mono text-emerald-300">request.tenant</code>.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-400 font-mono font-bold">02</span>
+            <div>
+              <strong class="text-white">Event-Driven Celery Offloading:</strong>
+              <p class="text-slate-400 mt-0.5">Heavy tasks return instant <code class="font-mono text-emerald-300">202 Accepted</code> with <code class="font-mono text-emerald-300">task_id</code>, processed by Celery + Redis workers in milliseconds.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-400 font-mono font-bold">03</span>
+            <div>
+              <strong class="text-white">Cryptographic UUIDv4 Primary Keys:</strong>
+              <p class="text-slate-400 mt-0.5">All models leverage UUIDv4 identifiers, rendering horizontal resource enumeration mathematically impossible.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ── 5. Core Request Lifecycle (Interactive Timeline) ────────────── -->
+  <section id="lifecycle" class="py-20 border-t border-surface-border bg-surface-1/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="text-center mb-16">
+        <span class="text-[11px] font-mono uppercase tracking-widest text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">Sequence Diagram</span>
+        <h2 class="text-3xl font-bold text-white mt-3">Core Request Lifecycle</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+
+        <!-- Node 1 -->
+        <div class="card-surface p-5 rounded-xl text-center relative group">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">1</div>
+          <h4 class="text-xs font-bold text-white mb-1">Client Request</h4>
+          <p class="text-[11px] text-slate-400 font-mono">Bearer Token + X-Workspace-ID</p>
+        </div>
+
+        <!-- Node 2 -->
+        <div class="card-surface p-5 rounded-xl text-center relative group">
+          <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">2</div>
+          <h4 class="text-xs font-bold text-white mb-1">Auth Layer</h4>
+          <p class="text-[11px] text-slate-400 font-mono">SimpleJWT Verification</p>
+        </div>
+
+        <!-- Node 3 -->
+        <div class="card-surface p-5 rounded-xl text-center relative group">
+          <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">3</div>
+          <h4 class="text-xs font-bold text-white mb-1">Tenant Middleware</h4>
+          <p class="text-[11px] text-slate-400 font-mono">RBAC &amp; Tenant Resolution</p>
+        </div>
+
+        <!-- Node 4 -->
+        <div class="card-surface p-5 rounded-xl text-center relative group">
+          <div class="w-8 h-8 rounded-full bg-amber-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">4</div>
+          <h4 class="text-xs font-bold text-white mb-1">Business Logic</h4>
+          <p class="text-[11px] text-slate-400 font-mono">request.tenant Scoped Query</p>
+        </div>
+
+        <!-- Node 5 -->
+        <div class="card-surface p-5 rounded-xl text-center relative group">
+          <div class="w-8 h-8 rounded-full bg-pink-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">5</div>
+          <h4 class="text-xs font-bold text-white mb-1">Async Handoff</h4>
+          <p class="text-[11px] text-slate-400 font-mono">202 Accepted + Celery Queue</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 6. Technology Stack Components ──────────────────────────────── -->
+  <section id="stack" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+    <div class="text-center mb-16">
+      <span class="text-[11px] font-mono uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Production Dependencies</span>
+      <h2 class="text-3xl font-bold text-white mt-3">Technology Stack</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+      <div class="card-surface p-5 rounded-xl">
+        <span class="text-[10px] font-mono text-indigo-400 uppercase">Framework</span>
+        <h4 class="text-sm font-bold text-white mt-1">Python 3.11+ / Django 5.2 LTS</h4>
+        <p class="text-xs text-slate-400 mt-1">Core ORM, custom User model, and security routing.</p>
+      </div>
+
+      <div class="card-surface p-5 rounded-xl">
+        <span class="text-[10px] font-mono text-purple-400 uppercase">API Layer</span>
+        <h4 class="text-sm font-bold text-white mt-1">DRF + SimpleJWT</h4>
+        <p class="text-xs text-slate-400 mt-1">Stateless JSON Web Tokens and request rate throttling.</p>
+      </div>
+
+      <div class="card-surface p-5 rounded-xl">
+        <span class="text-[10px] font-mono text-emerald-400 uppercase">Task Queue</span>
+        <h4 class="text-sm font-bold text-white mt-1">Celery + Redis Broker</h4>
+        <p class="text-xs text-slate-400 mt-1">Distributed async task execution and token tracking.</p>
+      </div>
+
+      <div class="card-surface p-5 rounded-xl">
+        <span class="text-[10px] font-mono text-amber-400 uppercase">Interface</span>
+        <h4 class="text-sm font-bold text-white mt-1">django-unfold + Tailwind</h4>
+        <p class="text-xs text-slate-400 mt-1">Tailwind-powered admin theme with live KPI widgets.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ── 7. Interactive API Verification Sandbox ─────────────────────── -->
+  <section id="sandbox" class="py-20 border-t border-surface-border bg-surface-1/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="text-center mb-14">
+        <span class="text-[11px] font-mono uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">API Usage Guide</span>
+        <h2 class="text-3xl font-bold text-white mt-3">Interactive Workflow Verification</h2>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="card-surface rounded-xl overflow-hidden max-w-4xl mx-auto">
+        <div class="flex flex-wrap border-b border-surface-border bg-surface-0/60 p-2 gap-2">
+          <button @click="activeTab = 'auth'" :class="activeTab === 'auth' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+            1. POST /auth/token/
+          </button>
+          <button @click="activeTab = 'workspace'" :class="activeTab === 'workspace' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+            2. POST /workspaces/
+          </button>
+          <button @click="activeTab = 'apikey'" :class="activeTab === 'apikey' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+            3. POST /billing/api-keys/
+          </button>
+          <button @click="activeTab = 'ai'" :class="activeTab === 'ai' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+            4. POST /ai/generate/
+          </button>
+        </div>
+
+        <div class="p-6 font-mono text-xs text-slate-300">
+          
+          <!-- Tab 1 -->
+          <div x-show="activeTab === 'auth'" x-cloak class="space-y-4">
+            <p class="text-slate-400 font-sans">Obtain stateless access and refresh JWT tokens using email identifier.</p>
+            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-emerald-400 overflow-x-auto">
+curl -X POST http://127.0.0.1:8000/api/v1/auth/token/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@smartops.com",
+    "password": "AdminPass123!"
+  }'</pre>
+          </div>
+
+          <!-- Tab 2 -->
+          <div x-show="activeTab === 'workspace'" x-cloak class="space-y-4">
+            <p class="text-slate-400 font-sans">Create a new isolated Workspace (tenant). Initiator is automatically set as 'Owner'.</p>
+            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-indigo-300 overflow-x-auto">
+curl -X POST http://127.0.0.1:8000/api/v1/workspaces/ \
+  -H "Authorization: Bearer &lt;access_token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Acme Global Enterprise"
+  }'</pre>
+          </div>
+
+          <!-- Tab 3 -->
+          <div x-show="activeTab === 'apikey'" x-cloak class="space-y-4">
+            <p class="text-slate-400 font-sans">Generate cryptographically hashed API keys scoped to the target workspace header.</p>
+            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-purple-300 overflow-x-auto">
+curl -X POST http://127.0.0.1:8000/api/v1/billing/api-keys/ \
+  -H "Authorization: Bearer &lt;access_token&gt;" \
+  -H "X-Workspace-ID: &lt;workspace_id&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Production AI Pipeline Key"
+  }'</pre>
+          </div>
+
+          <!-- Tab 4 -->
+          <div x-show="activeTab === 'ai'" x-cloak class="space-y-4">
+            <p class="text-slate-400 font-sans">Trigger asynchronous LLM task generation. Returns instant 202 Accepted with Celery task ID.</p>
+            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-amber-300 overflow-x-auto">
+curl -X POST http://127.0.0.1:8000/api/v1/ai/generate/ \
+  -H "Authorization: Bearer &lt;access_token&gt;" \
+  -H "X-Workspace-ID: &lt;workspace_id&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Summarize Q3 telemetry reports and risk metrics.",
+    "model": "gpt-4o"
+  }'</pre>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 8. Security & Compliance ────────────────────────────────────── -->
+  <section id="security" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+    <div class="text-center mb-16">
+      <span class="text-[11px] font-mono uppercase tracking-widest text-red-400 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20">OWASP Compliance</span>
+      <h2 class="text-3xl font-bold text-white mt-3">Security Controls</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+      <div class="card-surface p-5 rounded-xl border-l-2 border-red-500">
+        <h4 class="text-xs font-bold text-white uppercase font-mono">PBKDF2 Key Hashing</h4>
+        <p class="text-xs text-slate-400 mt-2">API keys are hashed using PBKDF2-SHA256. Raw secrets are never stored in plaintext.</p>
+      </div>
+
+      <div class="card-surface p-5 rounded-xl border-l-2 border-indigo-500">
+        <h4 class="text-xs font-bold text-white uppercase font-mono">DRF Rate Throttling</h4>
+        <p class="text-xs text-slate-400 mt-2">Anon (20/min) and User (200/min) rate limits prevent brute-force attacks.</p>
+      </div>
+
+      <div class="card-surface p-5 rounded-xl border-l-2 border-emerald-500">
+        <h4 class="text-xs font-bold text-white uppercase font-mono">Strict HTTP Headers</h4>
+        <p class="text-xs text-slate-400 mt-2">Enforces X-Frame-Options DENY, X-Content-Type-Options nosniff, and Referrer-Policy.</p>
+      </div>
+
+      <div class="card-surface p-5 rounded-xl border-l-2 border-purple-500">
+        <h4 class="text-xs font-bold text-white uppercase font-mono">UUID Obfuscation</h4>
+        <p class="text-xs text-slate-400 mt-2">All primary keys leverage UUIDv4, eliminating horizontal enumeration risks.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ── 9. Development Roadmap Timeline ─────────────────────────────── -->
+  <section id="roadmap" class="py-20 border-t border-surface-border bg-surface-1/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="text-center mb-16">
+        <span class="text-[11px] font-mono uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Progress Milestone</span>
+        <h2 class="text-3xl font-bold text-white mt-3">Development Roadmap</h2>
+      </div>
+
+      <div class="max-w-3xl mx-auto space-y-4">
+
+        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">1</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Phase 1: Multi-Tenant Architecture &amp; Custom Models</h4>
+              <p class="text-[11px] text-slate-400 font-mono">UUID User Model, Organization RBAC, TenantMiddleware</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+        </div>
+
+        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">2</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Phase 2: DRF REST API Layer &amp; Programmatic API Keys</h4>
+              <p class="text-[11px] text-slate-400 font-mono">SimpleJWT Auth, Workspace CRUD, API Key Manager</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+        </div>
+
+        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">3</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Phase 3: Celery + Redis Async AI Integration</h4>
+              <p class="text-[11px] text-slate-400 font-mono">LLM Service Facade, AIRequestLog, 202 Async Tasks</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+        </div>
+
+        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">4</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Phase 4: django-unfold Admin &amp; Client Web UI</h4>
+              <p class="text-[11px] text-slate-400 font-mono">KPI Callbacks, Tailwind + Alpine Web Dashboard</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+        </div>
+
+        <div class="card-surface p-4 rounded-xl flex items-center justify-between border-indigo-500/30">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono text-xs font-bold">5</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Phase 5: Cloud Deployment &amp; Production Hardening</h4>
+              <p class="text-[11px] text-slate-400 font-mono">HTTPS SSL, Gunicorn, PostgreSQL, Security Audit</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-mono font-semibold">NEXT PHASE</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────── -->
+  <footer class="mt-auto border-t border-surface-border py-8 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="font-mono text-slate-400">SmartOps B2B Engine &bull; Architected by Zeeshan Shabbir Qureshi</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" class="hover:text-emerald-400 font-medium">Demo Credentials File</a>
+        <a href="/admin/" class="hover:text-slate-300 font-medium">Django Unfold Admin</a>
+        <a href="/dashboard/" class="hover:text-slate-300 font-medium">Client Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

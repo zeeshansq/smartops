@@ -1,0 +1,22 @@
+# ==========================================
+# CORE FRAMEWORK & APPS (WINDOWS ONLY)
+# ==========================================
+Django~=5.2.0
+djangorestframework==3.15.*
+djangorestframework-simplejwt==5.3.*
+django-unfold==0.34.*
+django-environ>=0.11.2
+
+# ==========================================
+# DATABASE, CACHE, & BACKGROUND TASKS
+# ==========================================
+# Using the updated 3.3.* branch which contains modern Python Windows wheels
+psycopg[binary]==3.3.*
+
+celery==5.4.*
+redis==5.0.*
+
+# ==========================================
+# TESTING & DUMMY DATA
+# ==========================================
+faker>=30.0.0

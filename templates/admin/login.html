@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Admin Login — SmartOps Platform</title>
+  <meta name="description" content="Sign in to the SmartOps Platform Administration Console." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+  <!-- Tailwind CSS Engine & External Configurations -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="{% static 'js/tailwind-config.js' %}"></script>
+  <link href="{% static 'css/theme.css' %}" rel="stylesheet" />
+
+  <!-- Alpine.js & Platform JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="{% static 'js/main.js' %}"></script>
+</head>
+
+<body class="h-full bg-grid-texture login-spotlight flex items-center justify-center p-4 overflow-hidden" x-data="{ showPass: false }">
+
+  <div class="relative z-10 w-full max-w-sm">
+
+    <!-- Header Logo -->
+    <div class="flex flex-col items-center mb-6 text-center">
+      <a href="/" class="flex items-center gap-2.5 mb-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 group-hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined text-[24px]">admin_panel_settings</span>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white">SmartOps Admin</span>
+      </a>
+      <p class="text-xs text-slate-400 font-mono">Platform Administration Console</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card-login rounded-xl p-6 sm:p-8 relative">
+
+      <div class="h-0.5 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-emerald-500 absolute top-0 left-0 rounded-t-xl"></div>
+
+      <!-- Portal Type Badge -->
+      <div class="flex items-center justify-between mb-4 pb-3 border-b border-surface-border">
+        <span class="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">
+          Staff &amp; Superuser Portal
+        </span>
+        <span class="text-[10px] font-mono text-slate-500">Django Unfold</span>
+      </div>
+
+      {% if form.errors %}
+      <div class="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-400 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[16px]">error</span>
+        <span>Invalid staff credentials or non-staff account.</span>
+      </div>
+      {% endif %}
+
+      <!-- Quick Demo Credentials Fill for Superadmin -->
+      <div class="mb-5 p-3 rounded-lg bg-surface-0/90 border border-surface-border text-xs font-mono">
+        <div class="flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400 mb-2 font-semibold">
+          <span>⚡ Admin Quick Fill</span>
+          <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" class="text-emerald-400 hover:underline">All Accounts &rarr;</a>
+        </div>
+        <button
+          type="button"
+          @click="$refs.emailInput.value='admin@smartops.com'; $refs.passInput.value='AdminPass123!'"
+          class="w-full py-1.5 px-3 rounded bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-[11px] font-bold text-center transition-all flex items-center justify-center gap-1.5"
+        >
+          <span class="material-symbols-outlined text-[14px]">key</span>
+          Fill Superadmin Credentials
+        </button>
+      </div>
+
+      <form id="admin-login-form" method="post" action="" class="space-y-4" novalidate>
+        {% csrf_token %}
+
+        <!-- Username / Email -->
+        <div>
+          <label for="id_username" class="block text-[11px] font-mono uppercase text-slate-400 mb-1.5 font-semibold">
+            Admin Email Address
+          </label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-[18px]">admin_panel_settings</span>
+            <input
+              id="id_username"
+              name="username"
+              type="email"
+              x-ref="emailInput"
+              autocomplete="username"
+              required
+              placeholder="admin@smartops.com"
+              class="input-dark w-full rounded-lg py-2.5 pl-10 pr-4 text-xs font-mono"
+              value="{{ form.username.value|default:'' }}"
+            />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="id_password" class="block text-[11px] font-mono uppercase text-slate-400 mb-1.5 font-semibold">
+            Password
+          </label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-[18px]">lock</span>
+            <input
+              id="id_password"
+              name="password"
+              x-ref="passInput"
+              :type="showPass ? 'text' : 'password'"
+              autocomplete="current-password"
+              required
+              placeholder="••••••••••••"
+              class="input-dark w-full rounded-lg py-2.5 pl-10 pr-10 text-xs font-mono"
+            />
+            <button
+              type="button"
+              @click="showPass = !showPass"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+              tabindex="-1"
+            >
+              <span class="material-symbols-outlined text-[16px]" x-text="showPass ? 'visibility_off' : 'visibility'">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <input type="hidden" name="next" value="{{ next|default:'/admin/' }}" />
+
+        <!-- Submit -->
+        <button
+          id="login-submit"
+          type="submit"
+          class="w-full py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-indigo-600/30 mt-2 flex items-center justify-center gap-1.5"
+        >
+          Sign In to Admin Console &rarr;
+        </button>
+      </form>
+
+    </div>
+
+    <!-- Quick Links -->
+    <div class="mt-6 text-center text-xs text-slate-500 space-y-2">
+      <p>
+        <a href="/" class="text-slate-400 hover:text-white transition-colors">&larr; Return to Public Landing Page</a>
+      </p>
+      <p>
+        Client Tenant User?
+        <a href="{% url 'dashboard:login' %}" class="text-emerald-400 hover:text-emerald-300 transition-colors font-mono">Workspace Dashboard Login &rarr;</a>
+      </p>
+    </div>
+
+  </div>
+
+</body>
+</html>

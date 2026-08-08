@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block page_heading %}Overview{% endblock %}
+
+{% block content %}
+<!-- ── Welcome Header ───────────────────────────────────────────────── -->
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-surface-border pb-5">
+  <div>
+    <h2 class="text-xl font-bold text-white tracking-tight">
+      Welcome, {{ request.user.get_full_name|default:request.user.email }}
+    </h2>
+    <p class="mt-0.5 text-xs text-slate-400">System metrics and cross-workspace activity overview.</p>
+  </div>
+  <div class="flex items-center gap-2 font-mono text-xs">
+    <span class="px-2.5 py-1 rounded bg-surface-1 border border-surface-border text-slate-300">Tenant Isolation Active</span>
+  </div>
+</div>
+
+<!-- ── KPI Cards ─────────────────────────────────────────────────────── -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+
+  <!-- Workspaces -->
+  <div class="card-surface rounded-xl p-5 relative overflow-hidden group">
+    <div class="h-0.5 w-full bg-indigo-500 absolute top-0 left-0"></div>
+    <div class="flex items-start justify-between">
+      <div>
+        <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Workspaces</p>
+        <p class="mt-2 text-2xl font-extrabold text-white font-mono">{{ total_workspaces }}</p>
+        <p class="mt-1 text-[11px] text-slate-500">Active organizations</p>
+      </div>
+      <div class="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+        <span class="material-symbols-outlined text-[20px]">corporate_fare</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Keys -->
+  <div class="card-surface rounded-xl p-5 relative overflow-hidden group">
+    <div class="h-0.5 w-full bg-emerald-500 absolute top-0 left-0"></div>
+    <div class="flex items-start justify-between">
+      <div>
+        <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Active API Keys</p>
+        <p class="mt-2 text-2xl font-extrabold text-white font-mono">{{ total_api_keys }}</p>
+        <p class="mt-1 text-[11px] text-slate-500">Programmatically scoped</p>
+      </div>
+      <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+        <span class="material-symbols-outlined text-[20px]">key</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Requests (30d) -->
+  <div class="card-surface rounded-xl p-5 relative overflow-hidden group">
+    <div class="h-0.5 w-full bg-purple-500 absolute top-0 left-0"></div>
+    <div class="flex items-start justify-between">
+      <div>
+        <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">AI Requests (30d)</p>
+        <p class="mt-2 text-2xl font-extrabold text-white font-mono">{{ total_requests }}</p>
+        <p class="mt-1 text-[11px] text-slate-500">Async Celery jobs</p>
+      </div>
+      <div class="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+        <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tokens Used (30d) -->
+  <div class="card-surface rounded-xl p-5 relative overflow-hidden group">
+    <div class="h-0.5 w-full bg-amber-500 absolute top-0 left-0"></div>
+    <div class="flex items-start justify-between">
+      <div>
+        <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Tokens Consumed</p>
+        <p class="mt-2 text-2xl font-extrabold text-white font-mono">{{ total_tokens|floatformat:0 }}</p>
+        <p class="mt-1 text-[11px] text-slate-500">Total 30-day aggregate</p>
+      </div>
+      <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+        <span class="material-symbols-outlined text-[20px]">bolt</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Main Data Panels Grid ─────────────────────────────────────────── -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  <!-- Workspaces List -->
+  <div class="lg:col-span-1 card-surface rounded-xl overflow-hidden">
+    <div class="px-5 py-3.5 border-b border-surface-border flex items-center justify-between bg-surface-1/50">
+      <h3 class="text-xs font-bold text-white uppercase font-mono tracking-wider">Your Workspaces</h3>
+      <span class="text-[11px] font-mono text-slate-400">{{ total_workspaces }} active</span>
+    </div>
+
+    {% if organizations %}
+    <ul class="divide-y divide-surface-border">
+      {% for org in organizations %}
+      <li>
+        <a href="{% url 'dashboard:workspace-detail' org.id %}"
+           class="flex items-center gap-3 px-5 py-3 hover:bg-surface-2/60 transition-colors group">
+          <div class="w-8 h-8 rounded bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-xs font-mono font-bold uppercase flex-shrink-0">
+            {{ org.name|slice:":1" }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-semibold text-white truncate group-hover:text-indigo-300 transition-colors">{{ org.name }}</p>
+            <p class="text-[11px] font-mono text-slate-500 truncate">{{ org.slug }}</p>
+          </div>
+          <span class="material-symbols-outlined text-slate-600 group-hover:text-indigo-400 transition-colors text-[16px]">chevron_right</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="py-10 text-center px-4">
+      <p class="text-xs text-slate-400">No active workspaces linked to account.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Recent AI Activity -->
+  <div class="lg:col-span-2 card-surface rounded-xl overflow-hidden">
+    <div class="px-5 py-3.5 border-b border-surface-border flex items-center justify-between bg-surface-1/50">
+      <h3 class="text-xs font-bold text-white uppercase font-mono tracking-wider">Recent AI Telemetry</h3>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11px] font-mono text-slate-400">Realtime Stream</span>
+      </div>
+    </div>
+
+    {% if recent_logs %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs font-mono">
+        <thead>
+          <tr class="border-b border-surface-border bg-surface-0/60 text-slate-400">
+            <th class="px-5 py-2.5 text-left font-semibold">Workspace</th>
+            <th class="px-4 py-2.5 text-left font-semibold">Model</th>
+            <th class="px-4 py-2.5 text-left font-semibold">Tokens</th>
+            <th class="px-4 py-2.5 text-left font-semibold">Status</th>
+            <th class="px-5 py-2.5 text-left font-semibold">Time</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-border">
+          {% for log in recent_logs %}
+          <tr class="hover:bg-surface-2/40 transition-colors">
+            <td class="px-5 py-2.5 font-sans font-medium text-white truncate max-w-[130px]">
+              {{ log.organization.name|truncatechars:18 }}
+            </td>
+            <td class="px-4 py-2.5 text-slate-300">
+              {{ log.model_name|default:"—" }}
+            </td>
+            <td class="px-4 py-2.5 text-indigo-300 font-bold">
+              {{ log.tokens_used|default:0 }}
+            </td>
+            <td class="px-4 py-2.5">
+              {% if log.status == 'COMPLETED' %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  COMPLETED
+                </span>
+              {% elif log.status == 'FAILED' %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
+                  FAILED
+                </span>
+              {% elif log.status == 'PROCESSING' %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  PROCESSING
+                </span>
+              {% else %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                  PENDING
+                </span>
+              {% endif %}
+            </td>
+            <td class="px-5 py-2.5 text-slate-500 whitespace-nowrap">
+              {{ log.created_at|timesince }} ago
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="py-10 text-center px-4">
+      <p class="text-xs text-slate-400">No recent AI execution logs found.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

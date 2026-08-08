@@ -1,0 +1,102 @@
+# ============================================================
+# SmartOps Platform — Production .gitignore
+# ============================================================
+
+# ── Python Bytecode & Cache ──────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ── Virtual Environments ─────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+envops/
+
+# ── Django Secrets & Environment (.env) ──────────────────────
+# NEVER commit secret keys, passwords, or live environment files
+.env
+*.env
+!.env.example
+
+# ── Databases & Local Storage ────────────────────────────────
+*.sqlite3
+*.sqlite3-journal
+*.db
+*.db-journal
+db.sqlite3
+db.sqlite3-journal
+
+# ── Static Assets & Media Uploads ────────────────────────────
+staticfiles/
+media/
+static_collected/
+
+# ── Celery & Redis Task Queue ────────────────────────────────
+celerybeat-schedule
+celerybeat-schedule.db
+celerybeat.pid
+*.pid
+
+# ── Logs & Diagnostics ───────────────────────────────────────
+*.log
+logs/
+*.out
+
+# ── Testing & Code Quality Tools ─────────────────────────────
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# ── IDEs & Operating System Artifacts ────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+*.bak
+
+# ── SmartOps Generated Test Reports & Documentation ───────────
+# Auto-generated plaintext test account credentials & internal docs
+TEST_CREDENTIALS.txt
+*_CREDENTIALS.txt
+scratch/
+docs/
+

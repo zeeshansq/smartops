@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_heading %}{{ org.name }}{% endblock %}
+
+{% block content %}
+
+<!-- ── Workspace Header ──────────────────────────────────────────────── -->
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-surface-border pb-5">
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-mono text-base font-bold uppercase">
+      {{ org.name|slice:":1" }}
+    </div>
+    <div>
+      <h2 class="text-xl font-bold text-white tracking-tight">{{ org.name }}</h2>
+      <div class="flex items-center gap-2 mt-0.5 font-mono text-xs text-slate-400">
+        <span class="bg-surface-1 px-2 py-0.5 rounded border border-surface-border text-indigo-300">{{ org.slug }}</span>
+        <span>&bull;</span>
+        <span>{{ membership.get_role_display }} Access</span>
+        {% if org.is_active %}
+        <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">Active</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Stats Grid ─────────────────────────────────────────────────────── -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="card-surface rounded-xl p-4">
+    <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Members</p>
+    <p class="text-2xl font-extrabold text-white mt-1 font-mono">{{ members|length }}</p>
+  </div>
+  <div class="card-surface rounded-xl p-4">
+    <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">API Keys</p>
+    <p class="text-2xl font-extrabold text-white mt-1 font-mono">{{ api_keys|length }}</p>
+  </div>
+  <div class="card-surface rounded-xl p-4">
+    <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Total Tokens</p>
+    <p class="text-2xl font-extrabold text-white mt-1 font-mono">{{ stats.total_tokens|default:0 }}</p>
+  </div>
+  <div class="card-surface rounded-xl p-4">
+    <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Total Requests</p>
+    <p class="text-2xl font-extrabold text-white mt-1 font-mono">{{ stats.total_requests|default:0 }}</p>
+  </div>
+</div>
+
+<!-- ── Two Column Layout ──────────────────────────────────────────────── -->
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+  <!-- Left Column: Members & API Keys -->
+  <div class="lg:col-span-2 space-y-6">
+
+    <!-- Workspace Members -->
+    <div class="card-surface rounded-xl overflow-hidden">
+      <div class="px-5 py-3 border-b border-surface-border flex items-center justify-between bg-surface-1/50">
+        <h3 class="text-xs font-bold text-white uppercase font-mono tracking-wider">Members</h3>
+        <span class="text-[11px] font-mono text-slate-400">{{ members|length }} total</span>
+      </div>
+      <ul class="divide-y divide-surface-border">
+        {% for member in members %}
+        <li class="flex items-center gap-3 px-5 py-3">
+          <div class="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-mono font-bold uppercase flex-shrink-0">
+            {{ member.user.email|slice:":1" }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-semibold text-white truncate">{{ member.user.get_full_name|default:member.user.email }}</p>
+            <p class="text-[11px] font-mono text-slate-500 truncate">{{ member.user.email }}</p>
+          </div>
+          <span class="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded
+            {% if member.role == 'owner' %}bg-purple-500/10 text-purple-400 border border-purple-500/20{% elif member.role == 'admin' %}bg-indigo-500/10 text-indigo-400 border border-indigo-500/20{% else %}bg-slate-500/10 text-slate-400 border border-slate-500/20{% endif %}">
+            {{ member.role }}
+          </span>
+        </li>
+        {% empty %}
+        <li class="px-5 py-4 text-xs text-slate-400">No members linked to workspace.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- API Keys -->
+    <div class="card-surface rounded-xl overflow-hidden">
+      <div class="px-5 py-3 border-b border-surface-border bg-surface-1/50">
+        <h3 class="text-xs font-bold text-white uppercase font-mono tracking-wider">Active API Keys</h3>
+      </div>
+      <ul class="divide-y divide-surface-border">
+        {% for key in api_keys %}
+        <li class="px-5 py-3">
+          <div class="flex items-center justify-between">
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold text-white truncate">{{ key.name }}</p>
+              <p class="text-[11px] font-mono text-indigo-300 mt-0.5 truncate">{{ key.prefix }}••••••••</p>
+            </div>
+            {% if key.is_active %}
+            <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Active</span>
+            {% else %}
+            <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-500/10 text-slate-400 border border-slate-500/20">Revoked</span>
+            {% endif %}
+          </div>
+        </li>
+        {% empty %}
+        <li class="px-5 py-4 text-xs text-slate-400">No API keys generated.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Right Column: AI Log Audit -->
+  <div class="lg:col-span-3 card-surface rounded-xl overflow-hidden">
+    <div class="px-5 py-3 border-b border-surface-border flex items-center justify-between bg-surface-1/50">
+      <h3 class="text-xs font-bold text-white uppercase font-mono tracking-wider">AI Request Log Audit</h3>
+      <div class="flex items-center gap-3 text-xs font-mono text-slate-400">
+        <span class="text-emerald-400">{{ stats.completed|default:0 }} Completed</span>
+        <span class="text-red-400">{{ stats.failed|default:0 }} Failed</span>
+      </div>
+    </div>
+
+    {% if logs %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs font-mono">
+        <thead>
+          <tr class="border-b border-surface-border bg-surface-0/60 text-slate-400">
+            <th class="px-5 py-2.5 text-left font-semibold">Model</th>
+            <th class="px-4 py-2.5 text-left font-semibold">Tokens</th>
+            <th class="px-4 py-2.5 text-left font-semibold">Status</th>
+            <th class="px-5 py-2.5 text-left font-semibold">Time</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-border">
+          {% for log in logs %}
+          <tr class="hover:bg-surface-2/40 transition-colors">
+            <td class="px-5 py-2.5 text-white font-medium">{{ log.model_name|default:"—" }}</td>
+            <td class="px-4 py-2.5 text-indigo-300 font-bold">{{ log.tokens_used|default:0 }}</td>
+            <td class="px-4 py-2.5">
+              {% if log.status == 'COMPLETED' %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">COMPLETED</span>
+              {% elif log.status == 'FAILED' %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-red-500/10 text-red-400 border border-red-500/20">FAILED</span>
+              {% else %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20">{{ log.status }}</span>
+              {% endif %}
+            </td>
+            <td class="px-5 py-2.5 text-slate-500 whitespace-nowrap">{{ log.created_at|timesince }} ago</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="py-10 text-center px-4">
+      <p class="text-xs text-slate-400">No logs for this workspace.</p>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
