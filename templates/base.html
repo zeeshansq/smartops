@@ -57,7 +57,7 @@
 
         <!-- Logo -->
         <div class="flex items-center justify-between px-5 py-4 border-b" style="border-color: var(--border-color)">
-          <a href="/" class="flex items-center gap-2.5 group">
+          <a href="/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 group">
             <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 group-hover:scale-105 transition-transform">
               <span class="material-symbols-outlined text-[18px]">electric_bolt</span>
             </div>
@@ -213,7 +213,7 @@
             </div>
 
             <!-- Landing Page -->
-            <a href="/" target="_blank"
+            <a href="/" target="_blank" rel="noopener noreferrer"
                class="hidden sm:flex p-2 rounded-xl transition-all items-center border"
                style="background: var(--bg-surface-2); border-color: var(--border-color); color: var(--text-muted)"
                title="Landing Page">
@@ -221,7 +221,7 @@
             </a>
 
             {% if request.user.is_staff %}
-            <a href="/admin/" target="_blank"
+            <a href="/admin/" target="_blank" rel="noopener noreferrer"
                class="flex p-2 rounded-xl transition-all items-center border"
                style="background: var(--bg-surface-2); border-color: var(--border-color);"
                title="Admin Console">

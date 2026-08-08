@@ -87,7 +87,7 @@
 
     <!-- Header Logo -->
     <div class="flex flex-col items-center mb-6 text-center">
-      <a href="/" class="flex items-center gap-2.5 mb-3 group">
+      <a href="/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 mb-3 group">
         <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 group-hover:scale-105 transition-transform">
           <span class="material-symbols-outlined text-[22px]">electric_bolt</span>
         </div>
@@ -121,7 +121,7 @@
       <div class="mb-5 p-3 rounded-xl border" style="background: var(--bg-surface-0); border-color: var(--border-color)">
         <div class="flex items-center justify-between mb-2">
           <span class="text-[10px] uppercase tracking-wider font-mono font-semibold" style="color: var(--text-muted)">⚡ Demo Quick Fill</span>
-          <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" class="text-[10px] text-emerald-400 hover:text-emerald-300 font-mono transition-colors">All Accounts →</a>
+          <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" rel="noopener noreferrer" class="text-[10px] text-emerald-400 hover:text-emerald-300 font-mono transition-colors">All Accounts →</a>
         </div>
         <button
           type="button"
@@ -204,11 +204,11 @@
     <!-- Quick Links -->
     <div class="mt-5 text-center space-y-2">
       <p>
-        <a href="/" class="text-xs transition-colors" style="color: var(--text-muted)">← Back to Landing Page</a>
+        <a href="/" target="_blank" rel="noopener noreferrer" class="text-xs transition-colors" style="color: var(--text-muted)">← Back to Landing Page</a>
       </p>
       <p class="text-xs" style="color: var(--text-muted)">
         Platform Administrator?
-        <a href="/admin/login/" class="text-indigo-400 hover:text-indigo-300 transition-colors font-mono">Staff Admin Portal →</a>
+        <a href="/admin/login/" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 transition-colors font-mono">Staff Admin Portal →</a>
       </p>
     </div>
 
