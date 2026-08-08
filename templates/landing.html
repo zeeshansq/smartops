@@ -23,43 +23,45 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="h-full flex flex-col min-h-screen bg-grid-texture hero-spotlight antialiased" x-data="{ mobileMenuOpen: false, activeTab: 'auth', copiedMsg: '' }">
+<body class="h-full flex flex-col min-h-screen bg-grid-texture hero-spotlight antialiased"
+      x-data="{ mobileMenuOpen: false, activeTab: 'auth', copiedMsg: '' }">
 
-  <!-- ── Navigation Header ─────────────────────────────────────────── -->
-  <header class="sticky top-0 z-50 bg-surface-0/80 backdrop-blur-md border-b border-surface-border">
+  <!-- ── Navigation Header ──────────────────────────────────────────── -->
+  <header class="sticky top-0 z-50 border-b border-surface-border" style="background: var(--nav-bg); backdrop-filter: blur(16px);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-14">
 
         <!-- Brand Logo -->
         <a href="/" class="flex items-center gap-2 group flex-shrink-0">
-          <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30 group-hover:scale-105 transition-transform">
+          <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 group-hover:scale-105 transition-transform">
             <span class="material-symbols-outlined text-[17px]">electric_bolt</span>
           </div>
-          <span class="text-sm font-bold tracking-tight text-white">SmartOps</span>
+          <span class="text-sm font-bold tracking-tight" style="color: var(--text-primary)">SmartOps</span>
           <span class="hidden lg:inline-block px-1.5 py-0.5 text-[9px] font-mono uppercase bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full font-medium leading-none">Enterprise</span>
         </a>
 
-        <!-- Nav Links (only visible on large screens) -->
+        <!-- Nav Links (large screen only) -->
         <nav class="hidden lg:flex items-center gap-4 mx-4 flex-1 justify-center">
           <a href="#demo-credentials" class="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1 whitespace-nowrap">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Demo
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>Demo
           </a>
-          <a href="#problem-solution" class="text-[11px] font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">Overview</a>
-          <a href="#lifecycle" class="text-[11px] font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">Request Flow</a>
-          <a href="#stack" class="text-[11px] font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">Tech Stack</a>
-          <a href="#sandbox" class="text-[11px] font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">API Sandbox</a>
-          <a href="#security" class="text-[11px] font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">Security</a>
-          <a href="#roadmap" class="text-[11px] font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">Roadmap</a>
+          <a href="#problem-solution" class="text-[11px] font-medium hover:text-indigo-400 transition-colors whitespace-nowrap" style="color: var(--text-muted)">Overview</a>
+          <a href="#lifecycle" class="text-[11px] font-medium hover:text-indigo-400 transition-colors whitespace-nowrap" style="color: var(--text-muted)">Request Flow</a>
+          <a href="#stack" class="text-[11px] font-medium hover:text-indigo-400 transition-colors whitespace-nowrap" style="color: var(--text-muted)">Tech Stack</a>
+          <a href="#sandbox" class="text-[11px] font-medium hover:text-indigo-400 transition-colors whitespace-nowrap" style="color: var(--text-muted)">API Sandbox</a>
+          <a href="#security" class="text-[11px] font-medium hover:text-indigo-400 transition-colors whitespace-nowrap" style="color: var(--text-muted)">Security</a>
+          <a href="#roadmap" class="text-[11px] font-medium hover:text-indigo-400 transition-colors whitespace-nowrap" style="color: var(--text-muted)">Roadmap</a>
         </nav>
 
         <!-- Actions -->
         <div class="flex items-center gap-2 flex-shrink-0">
-          <!-- Theme Switcher — Icon only button -->
+          <!-- Theme Switcher — Icon only -->
           <div x-data="themeManager()" class="relative">
             <button
               @click="themeDropdownOpen = !themeDropdownOpen"
-              class="p-1.5 rounded-lg text-slate-400 hover:text-white bg-surface-1 border border-surface-border transition-all flex items-center"
-              title="Switch Theme (Light, Dark, System)"
+              class="p-1.5 rounded-lg transition-all flex items-center border"
+              style="background: var(--bg-surface-1); border-color: var(--border-color); color: var(--text-muted)"
+              title="Switch Theme"
             >
               <template x-if="mode === 'light'">
                 <span class="material-symbols-outlined text-[17px] text-amber-400">light_mode</span>
@@ -71,7 +73,6 @@
                 <span class="material-symbols-outlined text-[17px] text-emerald-400">desktop_windows</span>
               </template>
             </button>
-
             <div
               x-show="themeDropdownOpen"
               @click.away="themeDropdownOpen = false"
@@ -82,160 +83,223 @@
               x-transition:leave="transition ease-in duration-75"
               x-transition:leave-start="transform opacity-100 scale-100"
               x-transition:leave-end="transform opacity-0 scale-95"
-              class="absolute right-0 mt-2 w-36 rounded-xl bg-surface-1 border border-surface-border shadow-xl z-50 p-1 space-y-0.5 text-xs font-mono"
+              class="absolute right-0 mt-2 w-36 rounded-xl border shadow-xl z-50 p-1 space-y-0.5 text-xs font-mono"
+              style="background: var(--bg-surface-1); border-color: var(--border-color); box-shadow: 0 8px 30px rgba(0,0,0,0.3);"
             >
-              <button
-                @click="setTheme('light'); themeDropdownOpen = false"
-                :class="mode === 'light' ? 'bg-amber-500/10 text-amber-400 font-bold' : 'text-slate-300 hover:bg-surface-2'"
+              <button @click="setTheme('light'); themeDropdownOpen = false"
+                :class="mode === 'light' ? 'bg-amber-500/10 text-amber-400 font-bold' : 'hover:bg-surface-2'"
                 class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left"
-              >
-                <span class="material-symbols-outlined text-[15px] text-amber-400">light_mode</span>
-                <span>Light</span>
+                style="color: var(--text-secondary)">
+                <span class="material-symbols-outlined text-[15px] text-amber-400">light_mode</span><span>Light</span>
               </button>
-              <button
-                @click="setTheme('dark'); themeDropdownOpen = false"
-                :class="mode === 'dark' ? 'bg-indigo-500/10 text-indigo-400 font-bold' : 'text-slate-300 hover:bg-surface-2'"
+              <button @click="setTheme('dark'); themeDropdownOpen = false"
+                :class="mode === 'dark' ? 'bg-indigo-500/10 text-indigo-400 font-bold' : 'hover:bg-surface-2'"
                 class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left"
-              >
-                <span class="material-symbols-outlined text-[15px] text-indigo-400">dark_mode</span>
-                <span>Dark</span>
+                style="color: var(--text-secondary)">
+                <span class="material-symbols-outlined text-[15px] text-indigo-400">dark_mode</span><span>Dark</span>
               </button>
-              <button
-                @click="setTheme('system'); themeDropdownOpen = false"
-                :class="mode === 'system' ? 'bg-emerald-500/10 text-emerald-400 font-bold' : 'text-slate-300 hover:bg-surface-2'"
+              <button @click="setTheme('system'); themeDropdownOpen = false"
+                :class="mode === 'system' ? 'bg-emerald-500/10 text-emerald-400 font-bold' : 'hover:bg-surface-2'"
                 class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left"
-              >
-                <span class="material-symbols-outlined text-[15px] text-emerald-400">desktop_windows</span>
-                <span>System</span>
+                style="color: var(--text-secondary)">
+                <span class="material-symbols-outlined text-[15px] text-emerald-400">desktop_windows</span><span>System</span>
               </button>
             </div>
           </div>
 
-          <a href="/admin/" target="_blank" class="hidden md:flex p-1.5 text-slate-400 hover:text-indigo-400 bg-surface-1 border border-surface-border rounded-lg transition-all items-center" title="Unfold Admin">
-            <span class="material-symbols-outlined text-[17px]">admin_panel_settings</span>
+          <!-- Admin icon (md+) -->
+          <a href="/admin/" target="_blank"
+             class="hidden md:flex p-1.5 rounded-lg transition-all items-center border"
+             style="background: var(--bg-surface-1); border-color: var(--border-color); color: var(--text-muted)"
+             title="Admin Console">
+            <span class="material-symbols-outlined text-[17px] text-indigo-400">admin_panel_settings</span>
           </a>
-          <a href="{% url 'dashboard:home' %}" class="px-3 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-all flex items-center gap-1 whitespace-nowrap">
+
+          <!-- Sign In / Dashboard CTA -->
+          <a href="{% url 'dashboard:home' %}"
+             class="px-3 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-all flex items-center gap-1 whitespace-nowrap">
             <span class="material-symbols-outlined text-[14px]">space_dashboard</span>
             {% if request.user.is_authenticated %}Dashboard{% else %}Sign In{% endif %}
           </a>
-        </div>
 
-        <!-- Mobile Menu Button -->
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-1.5 ml-1 text-slate-400 hover:text-white">
-          <span class="material-symbols-outlined text-[20px]" x-text="mobileMenuOpen ? 'close' : 'menu'">menu</span>
-        </button>
+          <!-- Hamburger (visible until lg) -->
+          <button @click="mobileMenuOpen = !mobileMenuOpen"
+                  class="lg:hidden p-1.5 ml-1 rounded-lg border transition-all"
+                  style="background: var(--bg-surface-1); border-color: var(--border-color); color: var(--text-muted)">
+            <span class="material-symbols-outlined text-[20px]" x-text="mobileMenuOpen ? 'close' : 'menu'">menu</span>
+          </button>
+        </div>
 
       </div>
     </div>
 
-    <!-- Mobile Dropdown -->
-    <div x-show="mobileMenuOpen" x-cloak class="md:hidden bg-surface-1 border-b border-surface-border px-4 py-4 space-y-3">
-      <a href="#demo-credentials" @click="mobileMenuOpen = false" class="block text-xs text-emerald-400 font-semibold py-1">🔑 Demo Credentials</a>
-      <a href="#problem-solution" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Overview</a>
-      <a href="#lifecycle" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Request Flow</a>
-      <a href="#stack" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Tech Stack</a>
-      <a href="#sandbox" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">API Sandbox</a>
-      <a href="#security" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Security</a>
-      <a href="#roadmap" @click="mobileMenuOpen = false" class="block text-xs text-slate-300 font-medium py-1">Roadmap</a>
-      <div class="pt-3 border-t border-surface-border flex flex-col gap-2">
-        <a href="/admin/" class="w-full text-center py-2 text-xs font-semibold text-slate-300 bg-surface-2 rounded-lg border border-surface-border">Admin Portal</a>
-        <a href="{% url 'dashboard:home' %}" class="w-full text-center py-2 text-xs font-semibold text-slate-900 bg-white rounded-lg">
-          {% if request.user.is_authenticated %}Dashboard{% else %}Sign In{% endif %}
+    <!-- ── Mobile Drawer (slide-down) ── -->
+    <div
+      x-show="mobileMenuOpen"
+      x-cloak
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 -translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-150"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 -translate-y-2"
+      class="lg:hidden border-b"
+      style="background: var(--bg-surface-1); border-color: var(--border-color);"
+    >
+      <!-- Nav Links -->
+      <nav class="px-4 pt-3 pb-2 space-y-0.5">
+        <a href="#demo-credentials" @click="mobileMenuOpen = false"
+           class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Demo Credentials
+        </a>
+        <a href="#problem-solution" @click="mobileMenuOpen = false"
+           class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+           style="color: var(--text-secondary)">
+          <span class="material-symbols-outlined text-[18px] text-indigo-400">architecture</span>Overview
+        </a>
+        <a href="#lifecycle" @click="mobileMenuOpen = false"
+           class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+           style="color: var(--text-secondary)">
+          <span class="material-symbols-outlined text-[18px] text-purple-400">sync_alt</span>Request Flow
+        </a>
+        <a href="#stack" @click="mobileMenuOpen = false"
+           class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+           style="color: var(--text-secondary)">
+          <span class="material-symbols-outlined text-[18px] text-amber-400">layers</span>Tech Stack
+        </a>
+        <a href="#sandbox" @click="mobileMenuOpen = false"
+           class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+           style="color: var(--text-secondary)">
+          <span class="material-symbols-outlined text-[18px] text-emerald-400">api</span>API Sandbox
+        </a>
+        <a href="#security" @click="mobileMenuOpen = false"
+           class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+           style="color: var(--text-secondary)">
+          <span class="material-symbols-outlined text-[18px] text-red-400">shield</span>Security
+        </a>
+        <a href="#roadmap" @click="mobileMenuOpen = false"
+           class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+           style="color: var(--text-secondary)">
+          <span class="material-symbols-outlined text-[18px] text-indigo-400">route</span>Roadmap
+        </a>
+      </nav>
+
+      <!-- Mobile CTAs -->
+      <div class="px-4 pb-4 pt-2 flex flex-col gap-2 border-t" style="border-color: var(--border-color);">
+        <a href="/admin/" target="_blank"
+           class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-xl border transition-all"
+           style="background: var(--bg-surface-2); border-color: var(--border-color); color: var(--text-secondary)">
+          <span class="material-symbols-outlined text-[18px] text-indigo-400">admin_panel_settings</span>
+          Open Admin Console
+        </a>
+        <a href="{% url 'dashboard:home' %}"
+           class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-md shadow-indigo-600/20">
+          <span class="material-symbols-outlined text-[18px]">space_dashboard</span>
+          {% if request.user.is_authenticated %}Go to Dashboard{% else %}Sign In to Platform{% endif %}
         </a>
       </div>
     </div>
+
   </header>
 
-  <!-- ── 1. Hero Section ─────────────────────────────────────────────── -->
-  <section class="relative pt-16 pb-20 md:pt-24 md:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center flex-1">
+  <!-- ── 1. Hero Section ───────────────────────────────────────────────── -->
+  <section class="relative pt-14 pb-16 md:pt-20 md:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center flex-1">
 
     <!-- Status Badge -->
-    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface-1 border border-surface-border text-xs font-mono text-slate-300 mb-8">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-      <span class="text-emerald-400 font-semibold">PRODUCTION ENGINE OPERATIONAL</span>
-      <span class="text-slate-600">|</span>
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono mb-8"
+         style="background: var(--bg-surface-1); border-color: var(--border-color); color: var(--text-secondary)">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
+      <span class="text-emerald-400 font-semibold hidden sm:inline">PRODUCTION ENGINE OPERATIONAL</span>
+      <span class="text-emerald-400 font-semibold sm:hidden">LIVE</span>
+      <span style="color: var(--border-color)">|</span>
       <span>Django 5.2 LTS + Celery</span>
     </div>
 
     <!-- Main Headline -->
-    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight gradient-heading max-w-5xl mx-auto leading-[1.1]">
-      Scalable Architecture for Modern B2B SaaS
+    <h1 class="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight gradient-heading max-w-5xl mx-auto leading-[1.1]">
+      Scalable Architecture<br class="sm:hidden"> for Modern B2B SaaS
     </h1>
 
-    <p class="mt-6 text-base sm:text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed">
-      SmartOps resolves complex enterprise SaaS patterns out-of-the-box: rigid multi-tenant data isolation, event-driven async LLM task processing, and cryptographically hashed programmatic API keys.
+    <p class="mt-5 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed px-2" style="color: var(--text-secondary)">
+      SmartOps resolves complex enterprise SaaS patterns out-of-the-box: rigid multi-tenant data isolation, event-driven async LLM processing, and cryptographically hashed API keys.
     </p>
 
     <!-- Hero Actions -->
-    <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
-      <a href="{% url 'dashboard:home' %}" class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-slate-900 bg-white hover:bg-slate-100 rounded-lg shadow-md transition-all flex items-center justify-center gap-2">
+    <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 px-4 sm:px-0">
+      <a href="{% url 'dashboard:home' %}"
+         class="px-6 py-3 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-lg shadow-indigo-600/25 transition-all flex items-center justify-center gap-2">
         <span class="material-symbols-outlined text-[18px]">space_dashboard</span>
         Explore Web Dashboard
       </a>
-      <a href="#demo-credentials" class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 rounded-lg transition-all flex items-center justify-center gap-2">
+      <a href="#demo-credentials"
+         class="px-6 py-3 text-sm font-semibold text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 rounded-xl transition-all flex items-center justify-center gap-2">
         <span class="material-symbols-outlined text-[18px]">key</span>
         View Demo Credentials
       </a>
-      <a href="/admin/" target="_blank" class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-slate-200 bg-surface-1 hover:bg-surface-2 border border-surface-border hover:border-slate-600 rounded-lg transition-all flex items-center justify-center gap-2">
+      <a href="/admin/" target="_blank"
+         class="px-6 py-3 text-sm font-semibold rounded-xl border transition-all flex items-center justify-center gap-2"
+         style="background: var(--bg-surface-1); border-color: var(--border-color); color: var(--text-secondary)">
         <span class="material-symbols-outlined text-[18px] text-indigo-400">admin_panel_settings</span>
-        Open Django Unfold Admin
+        <span class="hidden sm:inline">Open Django Unfold Admin</span>
+        <span class="sm:hidden">Admin Console</span>
       </a>
     </div>
 
   </section>
 
-  <!-- ── 2. Telemetry Banner ─────────────────────────────────────────── -->
-  <section id="metrics" class="py-10 border-y border-surface-border bg-surface-1/40">
+  <!-- ── 2. Telemetry Banner ───────────────────────────────────────────── -->
+  <section id="metrics" class="py-8 border-y" style="border-color: var(--border-color); background: var(--bg-surface-1);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
 
-        <div class="px-4 py-2 border-l-2 border-indigo-500">
-          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Active Workspaces</p>
-          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_workspaces|default:0 }}</p>
-          <p class="text-[11px] text-slate-500 mt-0.5">Isolated Tenants</p>
+        <div class="px-3 sm:px-4 py-2 border-l-2 border-indigo-500">
+          <p class="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider" style="color: var(--text-muted)">Active Workspaces</p>
+          <p class="text-2xl sm:text-3xl font-extrabold mt-1 font-mono" style="color: var(--text-primary)">{{ total_workspaces|default:0 }}</p>
+          <p class="text-[10px] sm:text-[11px] mt-0.5" style="color: var(--text-muted)">Isolated Tenants</p>
         </div>
 
-        <div class="px-4 py-2 border-l-2 border-purple-500">
-          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">AI Tokens Processed</p>
-          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_tokens|default:0 }}</p>
-          <p class="text-[11px] text-slate-500 mt-0.5">Async Celery Tasks</p>
+        <div class="px-3 sm:px-4 py-2 border-l-2 border-purple-500">
+          <p class="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider" style="color: var(--text-muted)">AI Tokens Processed</p>
+          <p class="text-2xl sm:text-3xl font-extrabold mt-1 font-mono" style="color: var(--text-primary)">{{ total_tokens|default:0 }}</p>
+          <p class="text-[10px] sm:text-[11px] mt-0.5" style="color: var(--text-muted)">Async Celery Tasks</p>
         </div>
 
-        <div class="px-4 py-2 border-l-2 border-emerald-500">
-          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Active API Keys</p>
-          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_api_keys|default:0 }}</p>
-          <p class="text-[11px] text-slate-500 mt-0.5">PBKDF2 Hashed</p>
+        <div class="px-3 sm:px-4 py-2 border-l-2 border-emerald-500">
+          <p class="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider" style="color: var(--text-muted)">Active API Keys</p>
+          <p class="text-2xl sm:text-3xl font-extrabold mt-1 font-mono" style="color: var(--text-primary)">{{ total_api_keys|default:0 }}</p>
+          <p class="text-[10px] sm:text-[11px] mt-0.5" style="color: var(--text-muted)">PBKDF2 Hashed</p>
         </div>
 
-        <div class="px-4 py-2 border-l-2 border-amber-500">
-          <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Registered Users</p>
-          <p class="text-3xl font-extrabold text-white mt-1 font-mono">{{ total_users|default:0 }}</p>
-          <p class="text-[11px] text-slate-500 mt-0.5">UUID Accounts</p>
+        <div class="px-3 sm:px-4 py-2 border-l-2 border-amber-500">
+          <p class="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider" style="color: var(--text-muted)">Registered Users</p>
+          <p class="text-2xl sm:text-3xl font-extrabold mt-1 font-mono" style="color: var(--text-primary)">{{ total_users|default:0 }}</p>
+          <p class="text-[10px] sm:text-[11px] mt-0.5" style="color: var(--text-muted)">UUID Accounts</p>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- ── 3. Live Demo & Test Credentials Section ─────────────────────── -->
-  <section id="demo-credentials" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-surface-border">
+  <!-- ── 3. Live Demo & Test Credentials ─────────────────────────────── -->
+  <section id="demo-credentials" class="py-14 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b" style="border-color: var(--border-color)">
 
-    <div class="text-center mb-12">
+    <div class="text-center mb-10 sm:mb-12">
       <span class="text-[11px] font-mono uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Instant Platform Exploration</span>
-      <h2 class="text-3xl font-bold text-white mt-3">Demo Accounts &amp; Exploration Guide</h2>
-      <p class="text-xs text-slate-400 mt-1 max-w-xl mx-auto">Use these pre-seeded credentials to explore the admin console and client dashboard instantly.</p>
+      <h2 class="text-2xl sm:text-3xl font-bold mt-3" style="color: var(--text-primary)">Demo Accounts &amp; Exploration Guide</h2>
+      <p class="text-xs sm:text-sm mt-2 max-w-xl mx-auto" style="color: var(--text-muted)">Use these pre-seeded credentials to explore the admin console and client dashboard instantly.</p>
     </div>
 
-    <!-- Notification Toast -->
-    <div x-show="copiedMsg" x-cloak class="mb-6 p-3 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-mono text-center rounded-lg max-w-md mx-auto">
+    <!-- Toast -->
+    <div x-show="copiedMsg" x-cloak
+         class="mb-6 p-3 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-mono text-center rounded-xl max-w-md mx-auto">
       <span x-text="copiedMsg"></span>
     </div>
 
     <!-- Account Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
       {% for acc in demo_accounts %}
-      <div class="card-surface p-6 rounded-xl border border-surface-border hover:border-slate-600 transition-all flex flex-col justify-between">
+      <div class="card-surface p-5 sm:p-6 rounded-xl flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4">
             <span class="text-[10px] font-mono font-semibold uppercase px-2.5 py-0.5 rounded bg-{{ acc.color }}-500/10 text-{{ acc.color }}-400 border border-{{ acc.color }}-500/20">
@@ -246,144 +310,135 @@
 
           <div class="space-y-2 mb-4">
             <div>
-              <p class="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Email Address</p>
-              <div class="flex items-center justify-between bg-surface-0 px-3 py-1.5 rounded border border-surface-border text-xs font-mono text-white mt-0.5">
-                <span class="truncate">{{ acc.email }}</span>
-                <button @click="navigator.clipboard.writeText('{{ acc.email }}'); copiedMsg = 'Copied email: {{ acc.email }}'; setTimeout(() => copiedMsg = '', 3000)" class="text-slate-400 hover:text-emerald-400 p-1">
-                  <span class="material-symbols-outlined text-[16px]">content_copy</span>
+              <p class="text-[10px] uppercase tracking-wider font-mono mb-1" style="color: var(--text-muted)">Email Address</p>
+              <div class="flex items-center justify-between px-3 py-1.5 rounded-lg border text-xs font-mono" style="background: var(--bg-surface-0); border-color: var(--border-color); color: var(--text-primary)">
+                <span class="truncate mr-2">{{ acc.email }}</span>
+                <button @click="navigator.clipboard.writeText('{{ acc.email }}'); copiedMsg = 'Copied: {{ acc.email }}'; setTimeout(() => copiedMsg = '', 3000)"
+                        class="flex-shrink-0 p-1 rounded hover:bg-emerald-500/10 transition-colors" style="color: var(--text-muted)">
+                  <span class="material-symbols-outlined text-[15px]">content_copy</span>
                 </button>
               </div>
             </div>
 
             <div>
-              <p class="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Password</p>
-              <div class="flex items-center justify-between bg-surface-0 px-3 py-1.5 rounded border border-surface-border text-xs font-mono text-emerald-400 mt-0.5">
-                <span>{{ acc.password }}</span>
-                <button @click="navigator.clipboard.writeText('{{ acc.password }}'); copiedMsg = 'Copied password!'; setTimeout(() => copiedMsg = '', 3000)" class="text-slate-400 hover:text-emerald-400 p-1">
-                  <span class="material-symbols-outlined text-[16px]">content_copy</span>
+              <p class="text-[10px] uppercase tracking-wider font-mono mb-1" style="color: var(--text-muted)">Password</p>
+              <div class="flex items-center justify-between px-3 py-1.5 rounded-lg border text-xs font-mono" style="background: var(--bg-surface-0); border-color: var(--border-color)">
+                <span class="text-emerald-400">{{ acc.password }}</span>
+                <button @click="navigator.clipboard.writeText('{{ acc.password }}'); copiedMsg = 'Password copied!'; setTimeout(() => copiedMsg = '', 3000)"
+                        class="flex-shrink-0 p-1 rounded hover:bg-emerald-500/10 transition-colors" style="color: var(--text-muted)">
+                  <span class="material-symbols-outlined text-[15px]">content_copy</span>
                 </button>
               </div>
             </div>
           </div>
 
-          <p class="text-[11px] text-slate-400 font-sans">
-            <strong>Access:</strong> {{ acc.access }}
+          <p class="text-[11px] leading-relaxed" style="color: var(--text-muted)">
+            <strong style="color: var(--text-secondary)">Access:</strong> {{ acc.access }}
           </p>
         </div>
 
-        <div class="pt-4 mt-4 border-t border-surface-border flex items-center justify-between">
+        <div class="pt-4 mt-4 border-t flex items-center justify-between" style="border-color: var(--border-color)">
           {% if 'Admin' in acc.role or 'Superadmin' in acc.role or 'Staff' in acc.role %}
             <a href="/admin/" target="_blank" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
-              Log in to Admin &rarr;
+              Log in to Admin <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
             </a>
           {% else %}
             <a href="{% url 'dashboard:login' %}" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
-              Log in to Dashboard &rarr;
+              Log in to Dashboard <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
             </a>
           {% endif %}
         </div>
       </div>
       {% endfor %}
-
     </div>
 
-    <!-- Download & Seeder Info Footer -->
-    <div class="card-surface p-6 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 border border-surface-border">
+    <!-- Credentials download card -->
+    <div class="card-surface p-5 sm:p-6 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
           <span class="material-symbols-outlined text-[22px]">description</span>
         </div>
         <div>
-          <h4 class="text-sm font-bold text-white">Full Test Credentials Document (TEST_CREDENTIALS.txt)</h4>
-          <p class="text-xs text-slate-400 mt-0.5">View all 40+ seeded accounts, workspace mappings, and API quick-start endpoints.</p>
+          <h4 class="text-sm font-bold" style="color: var(--text-primary)">Full Test Credentials (TEST_CREDENTIALS.txt)</h4>
+          <p class="text-xs mt-0.5" style="color: var(--text-muted)">View all 40+ seeded accounts, workspace mappings, and API endpoints.</p>
         </div>
       </div>
-
-      <div class="flex items-center gap-3 w-full sm:w-auto">
-        <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" class="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-900 bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-all text-center flex items-center justify-center gap-1.5">
-          <span class="material-symbols-outlined text-[16px]">file_download</span>
-          View Full Credentials File
-        </a>
-      </div>
+      <a href="{% url 'dashboard:demo-credentials' %}" target="_blank"
+         class="w-full sm:w-auto flex-shrink-0 px-4 py-2.5 text-xs font-semibold text-slate-900 bg-emerald-400 hover:bg-emerald-300 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-emerald-500/20">
+        <span class="material-symbols-outlined text-[16px]">file_download</span>
+        View Full Credentials File
+      </a>
     </div>
 
   </section>
 
-  <!-- ── 4. Problem vs Solution Comparison Matrix ────────────────────── -->
-  <section id="problem-solution" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <!-- ── 4. Problem vs Solution ─────────────────────────────────────── -->
+  <section id="problem-solution" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
-    <div class="text-center mb-14">
+    <div class="text-center mb-10 sm:mb-14">
       <span class="text-[11px] font-mono uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Problem &amp; Solution</span>
-      <h2 class="text-3xl font-bold text-white mt-3">Architectural Principles</h2>
-      <p class="text-xs text-slate-400 mt-1 max-w-xl mx-auto">How SmartOps resolves classical SaaS bottlenecks and security vulnerabilities.</p>
+      <h2 class="text-2xl sm:text-3xl font-bold mt-3" style="color: var(--text-primary)">Architectural Principles</h2>
+      <p class="text-xs sm:text-sm mt-2 max-w-xl mx-auto" style="color: var(--text-muted)">How SmartOps resolves classical SaaS bottlenecks and security vulnerabilities.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
 
-      <!-- The Problem Card -->
-      <div class="card-border rounded-xl p-6 sm:p-8 border-red-500/20 relative overflow-hidden bg-red-950/10">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">
+      <div class="card-border rounded-xl p-5 sm:p-8 border border-red-500/20 relative overflow-hidden bg-red-950/10">
+        <div class="flex items-center gap-3 mb-5 sm:mb-6">
+          <div class="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 flex-shrink-0">
             <span class="material-symbols-outlined text-[18px]">warning</span>
           </div>
-          <h3 class="text-lg font-bold text-red-300">The B2B SaaS Problem Statement</h3>
+          <h3 class="text-base sm:text-lg font-bold text-red-300">The B2B SaaS Problem Statement</h3>
         </div>
-
-        <ul class="space-y-4 text-xs text-slate-300 font-sans">
+        <ul class="space-y-4 text-xs font-sans">
+          {% for item in problems %}
           <li class="flex items-start gap-3">
-            <span class="text-red-400 font-mono font-bold">01</span>
-            <div>
-              <strong class="text-white">Cross-Tenant Data Leaks:</strong>
-              <p class="text-slate-400 mt-0.5">In single-DB apps, an un-scoped ORM query can accidentally expose Client A's confidential data to Client B.</p>
-            </div>
+            <span class="text-red-400 font-mono font-bold flex-shrink-0">0{{ forloop.counter }}</span>
+            <div><strong style="color: var(--text-primary)">{{ item.title }}:</strong>
+              <p class="mt-0.5" style="color: var(--text-muted)">{{ item.desc }}</p></div>
+          </li>
+          {% empty %}
+          <li class="flex items-start gap-3">
+            <span class="text-red-400 font-mono font-bold flex-shrink-0">01</span>
+            <div><strong style="color: var(--text-primary)">Cross-Tenant Data Leaks:</strong>
+              <p class="mt-0.5" style="color: var(--text-muted)">In single-DB apps, an un-scoped ORM query can accidentally expose Client A's confidential data to Client B.</p></div>
           </li>
           <li class="flex items-start gap-3">
-            <span class="text-red-400 font-mono font-bold">02</span>
-            <div>
-              <strong class="text-white">Synchronous Server Bottlenecks:</strong>
-              <p class="text-slate-400 mt-0.5">Invoking external AI APIs or complex reports directly on HTTP threads causes worker timeouts and degraded UX.</p>
-            </div>
+            <span class="text-red-400 font-mono font-bold flex-shrink-0">02</span>
+            <div><strong style="color: var(--text-primary)">Synchronous Server Bottlenecks:</strong>
+              <p class="mt-0.5" style="color: var(--text-muted)">Invoking external AI APIs directly on HTTP threads causes worker timeouts and degraded UX.</p></div>
           </li>
           <li class="flex items-start gap-3">
-            <span class="text-red-400 font-mono font-bold">03</span>
-            <div>
-              <strong class="text-white">Sequential ID Enumeration:</strong>
-              <p class="text-slate-400 mt-0.5">Sequential integer primary keys (e.g. <code class="font-mono text-red-300">/orgs/5/</code>) allow attackers to easily scrape and count tenant records.</p>
-            </div>
+            <span class="text-red-400 font-mono font-bold flex-shrink-0">03</span>
+            <div><strong style="color: var(--text-primary)">Sequential ID Enumeration:</strong>
+              <p class="mt-0.5" style="color: var(--text-muted)">Sequential integer primary keys allow attackers to easily scrape and count tenant records.</p></div>
           </li>
+          {% endfor %}
         </ul>
       </div>
 
-      <!-- The SmartOps Solution Card -->
-      <div class="card-border rounded-xl p-6 sm:p-8 border-emerald-500/20 relative overflow-hidden bg-emerald-950/10">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+      <div class="card-border rounded-xl p-5 sm:p-8 border border-emerald-500/20 relative overflow-hidden bg-emerald-950/10">
+        <div class="flex items-center gap-3 mb-5 sm:mb-6">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
             <span class="material-symbols-outlined text-[18px]">verified</span>
           </div>
-          <h3 class="text-lg font-bold text-emerald-300">The SmartOps Enterprise Architecture</h3>
+          <h3 class="text-base sm:text-lg font-bold text-emerald-300">The SmartOps Enterprise Architecture</h3>
         </div>
-
-        <ul class="space-y-4 text-xs text-slate-300 font-sans">
+        <ul class="space-y-4 text-xs font-sans">
           <li class="flex items-start gap-3">
-            <span class="text-emerald-400 font-mono font-bold">01</span>
-            <div>
-              <strong class="text-white">Request-Isolated TenantMiddleware:</strong>
-              <p class="text-slate-400 mt-0.5">Interceptors validate <code class="font-mono text-emerald-300">X-Workspace-ID</code> and user roles on every request, scoping queries to <code class="font-mono text-emerald-300">request.tenant</code>.</p>
-            </div>
+            <span class="text-emerald-400 font-mono font-bold flex-shrink-0">01</span>
+            <div><strong style="color: var(--text-primary)">Request-Isolated TenantMiddleware:</strong>
+              <p class="mt-0.5" style="color: var(--text-muted)">Interceptors validate <code class="font-mono text-emerald-300">X-Workspace-ID</code> and user roles on every request, scoping queries to <code class="font-mono text-emerald-300">request.tenant</code>.</p></div>
           </li>
           <li class="flex items-start gap-3">
-            <span class="text-emerald-400 font-mono font-bold">02</span>
-            <div>
-              <strong class="text-white">Event-Driven Celery Offloading:</strong>
-              <p class="text-slate-400 mt-0.5">Heavy tasks return instant <code class="font-mono text-emerald-300">202 Accepted</code> with <code class="font-mono text-emerald-300">task_id</code>, processed by Celery + Redis workers in milliseconds.</p>
-            </div>
+            <span class="text-emerald-400 font-mono font-bold flex-shrink-0">02</span>
+            <div><strong style="color: var(--text-primary)">Event-Driven Celery Offloading:</strong>
+              <p class="mt-0.5" style="color: var(--text-muted)">Heavy tasks return instant <code class="font-mono text-emerald-300">202 Accepted</code> with <code class="font-mono text-emerald-300">task_id</code>, processed by Celery + Redis workers.</p></div>
           </li>
           <li class="flex items-start gap-3">
-            <span class="text-emerald-400 font-mono font-bold">03</span>
-            <div>
-              <strong class="text-white">Cryptographic UUIDv4 Primary Keys:</strong>
-              <p class="text-slate-400 mt-0.5">All models leverage UUIDv4 identifiers, rendering horizontal resource enumeration mathematically impossible.</p>
-            </div>
+            <span class="text-emerald-400 font-mono font-bold flex-shrink-0">03</span>
+            <div><strong style="color: var(--text-primary)">Cryptographic UUIDv4 Primary Keys:</strong>
+              <p class="mt-0.5" style="color: var(--text-muted)">All models leverage UUIDv4 identifiers, rendering horizontal resource enumeration mathematically impossible.</p></div>
           </li>
         </ul>
       </div>
@@ -392,152 +447,158 @@
 
   </section>
 
-  <!-- ── 5. Core Request Lifecycle (Interactive Timeline) ────────────── -->
-  <section id="lifecycle" class="py-20 border-t border-surface-border bg-surface-1/30">
+  <!-- ── 5. Request Lifecycle ──────────────────────────────────────────── -->
+  <section id="lifecycle" class="py-14 sm:py-20 border-t" style="border-color: var(--border-color); background: var(--bg-surface-1);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="text-center mb-16">
+      <div class="text-center mb-10 sm:mb-14">
         <span class="text-[11px] font-mono uppercase tracking-widest text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">Sequence Diagram</span>
-        <h2 class="text-3xl font-bold text-white mt-3">Core Request Lifecycle</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold mt-3" style="color: var(--text-primary)">Core Request Lifecycle</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+      <!-- Vertical on mobile, horizontal on md+ -->
+      <div class="flex flex-col md:grid md:grid-cols-5 gap-4 relative">
 
-        <!-- Node 1 -->
-        <div class="card-surface p-5 rounded-xl text-center relative group">
-          <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">1</div>
-          <h4 class="text-xs font-bold text-white mb-1">Client Request</h4>
-          <p class="text-[11px] text-slate-400 font-mono">Bearer Token + X-Workspace-ID</p>
+        {% for node in lifecycle_nodes %}
+        <div class="card-surface p-4 sm:p-5 rounded-xl flex md:flex-col items-center md:text-center gap-4 md:gap-0 relative group">
+          <div class="w-8 h-8 rounded-full {{ node.bg }} text-white font-mono text-xs font-bold flex items-center justify-center flex-shrink-0 md:mx-auto md:mb-3">{{ forloop.counter }}</div>
+          <div class="md:block">
+            <h4 class="text-xs font-bold" style="color: var(--text-primary)">{{ node.title }}</h4>
+            <p class="text-[11px] font-mono mt-0.5" style="color: var(--text-muted)">{{ node.sub }}</p>
+          </div>
+          {% if not forloop.last %}
+          <div class="hidden md:block absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-indigo-500">
+            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+          </div>
+          {% endif %}
         </div>
-
-        <!-- Node 2 -->
-        <div class="card-surface p-5 rounded-xl text-center relative group">
-          <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">2</div>
-          <h4 class="text-xs font-bold text-white mb-1">Auth Layer</h4>
-          <p class="text-[11px] text-slate-400 font-mono">SimpleJWT Verification</p>
+        {% empty %}
+        <div class="card-surface p-4 sm:p-5 rounded-xl flex md:flex-col items-center md:text-center gap-4 md:gap-0">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-mono text-xs font-bold flex items-center justify-center flex-shrink-0">1</div>
+          <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Client Request</h4>
+          <p class="text-[11px] font-mono" style="color: var(--text-muted)">Bearer Token + X-Workspace-ID</p></div>
         </div>
-
-        <!-- Node 3 -->
-        <div class="card-surface p-5 rounded-xl text-center relative group">
-          <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">3</div>
-          <h4 class="text-xs font-bold text-white mb-1">Tenant Middleware</h4>
-          <p class="text-[11px] text-slate-400 font-mono">RBAC &amp; Tenant Resolution</p>
+        <div class="card-surface p-4 sm:p-5 rounded-xl flex md:flex-col items-center md:text-center gap-4 md:gap-0">
+          <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-mono text-xs font-bold flex items-center justify-center flex-shrink-0">2</div>
+          <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Auth Layer</h4>
+          <p class="text-[11px] font-mono" style="color: var(--text-muted)">SimpleJWT Verification</p></div>
         </div>
-
-        <!-- Node 4 -->
-        <div class="card-surface p-5 rounded-xl text-center relative group">
-          <div class="w-8 h-8 rounded-full bg-amber-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">4</div>
-          <h4 class="text-xs font-bold text-white mb-1">Business Logic</h4>
-          <p class="text-[11px] text-slate-400 font-mono">request.tenant Scoped Query</p>
+        <div class="card-surface p-4 sm:p-5 rounded-xl flex md:flex-col items-center md:text-center gap-4 md:gap-0">
+          <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-mono text-xs font-bold flex items-center justify-center flex-shrink-0">3</div>
+          <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Tenant Middleware</h4>
+          <p class="text-[11px] font-mono" style="color: var(--text-muted)">RBAC &amp; Tenant Resolution</p></div>
         </div>
-
-        <!-- Node 5 -->
-        <div class="card-surface p-5 rounded-xl text-center relative group">
-          <div class="w-8 h-8 rounded-full bg-pink-600 text-white font-mono text-xs font-bold flex items-center justify-center mx-auto mb-3">5</div>
-          <h4 class="text-xs font-bold text-white mb-1">Async Handoff</h4>
-          <p class="text-[11px] text-slate-400 font-mono">202 Accepted + Celery Queue</p>
+        <div class="card-surface p-4 sm:p-5 rounded-xl flex md:flex-col items-center md:text-center gap-4 md:gap-0">
+          <div class="w-8 h-8 rounded-full bg-amber-600 text-white font-mono text-xs font-bold flex items-center justify-center flex-shrink-0">4</div>
+          <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Business Logic</h4>
+          <p class="text-[11px] font-mono" style="color: var(--text-muted)">request.tenant Scoped Query</p></div>
         </div>
+        <div class="card-surface p-4 sm:p-5 rounded-xl flex md:flex-col items-center md:text-center gap-4 md:gap-0">
+          <div class="w-8 h-8 rounded-full bg-pink-600 text-white font-mono text-xs font-bold flex items-center justify-center flex-shrink-0">5</div>
+          <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Async Handoff</h4>
+          <p class="text-[11px] font-mono" style="color: var(--text-muted)">202 Accepted + Celery Queue</p></div>
+        </div>
+        {% endfor %}
 
       </div>
 
     </div>
   </section>
 
-  <!-- ── 6. Technology Stack Components ──────────────────────────────── -->
-  <section id="stack" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <!-- ── 6. Technology Stack ──────────────────────────────────────────── -->
+  <section id="stack" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
-    <div class="text-center mb-16">
+    <div class="text-center mb-10 sm:mb-14">
       <span class="text-[11px] font-mono uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Production Dependencies</span>
-      <h2 class="text-3xl font-bold text-white mt-3">Technology Stack</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold mt-3" style="color: var(--text-primary)">Technology Stack</h2>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
       <div class="card-surface p-5 rounded-xl">
         <span class="text-[10px] font-mono text-indigo-400 uppercase">Framework</span>
-        <h4 class="text-sm font-bold text-white mt-1">Python 3.11+ / Django 5.2 LTS</h4>
-        <p class="text-xs text-slate-400 mt-1">Core ORM, custom User model, and security routing.</p>
+        <h4 class="text-sm font-bold mt-1" style="color: var(--text-primary)">Python 3.11+ / Django 5.2 LTS</h4>
+        <p class="text-xs mt-1" style="color: var(--text-muted)">Core ORM, custom User model, and security routing.</p>
       </div>
 
       <div class="card-surface p-5 rounded-xl">
         <span class="text-[10px] font-mono text-purple-400 uppercase">API Layer</span>
-        <h4 class="text-sm font-bold text-white mt-1">DRF + SimpleJWT</h4>
-        <p class="text-xs text-slate-400 mt-1">Stateless JSON Web Tokens and request rate throttling.</p>
+        <h4 class="text-sm font-bold mt-1" style="color: var(--text-primary)">DRF + SimpleJWT</h4>
+        <p class="text-xs mt-1" style="color: var(--text-muted)">Stateless JSON Web Tokens and request rate throttling.</p>
       </div>
 
       <div class="card-surface p-5 rounded-xl">
         <span class="text-[10px] font-mono text-emerald-400 uppercase">Task Queue</span>
-        <h4 class="text-sm font-bold text-white mt-1">Celery + Redis Broker</h4>
-        <p class="text-xs text-slate-400 mt-1">Distributed async task execution and token tracking.</p>
+        <h4 class="text-sm font-bold mt-1" style="color: var(--text-primary)">Celery + Redis Broker</h4>
+        <p class="text-xs mt-1" style="color: var(--text-muted)">Distributed async task execution and token tracking.</p>
       </div>
 
       <div class="card-surface p-5 rounded-xl">
         <span class="text-[10px] font-mono text-amber-400 uppercase">Interface</span>
-        <h4 class="text-sm font-bold text-white mt-1">django-unfold + Tailwind</h4>
-        <p class="text-xs text-slate-400 mt-1">Tailwind-powered admin theme with live KPI widgets.</p>
+        <h4 class="text-sm font-bold mt-1" style="color: var(--text-primary)">django-unfold + Tailwind</h4>
+        <p class="text-xs mt-1" style="color: var(--text-muted)">Tailwind-powered admin theme with live KPI widgets.</p>
       </div>
 
     </div>
 
   </section>
 
-  <!-- ── 7. Interactive API Verification Sandbox ─────────────────────── -->
-  <section id="sandbox" class="py-20 border-t border-surface-border bg-surface-1/40">
+  <!-- ── 7. API Sandbox ──────────────────────────────────────────────── -->
+  <section id="sandbox" class="py-14 sm:py-20 border-t" style="border-color: var(--border-color); background: var(--bg-surface-1);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="text-center mb-14">
+      <div class="text-center mb-10 sm:mb-14">
         <span class="text-[11px] font-mono uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">API Usage Guide</span>
-        <h2 class="text-3xl font-bold text-white mt-3">Interactive Workflow Verification</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold mt-3" style="color: var(--text-primary)">Interactive Workflow Verification</h2>
       </div>
 
-      <!-- Tab Switcher -->
       <div class="card-surface rounded-xl overflow-hidden max-w-4xl mx-auto">
-        <div class="flex flex-wrap border-b border-surface-border bg-surface-0/60 p-2 gap-2">
-          <button @click="activeTab = 'auth'" :class="activeTab === 'auth' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+        <!-- Tab bar — scrollable on mobile -->
+        <div class="flex border-b overflow-x-auto scrollbar-hide" style="background: var(--bg-surface-0); border-color: var(--border-color);">
+          <button @click="activeTab = 'auth'" :class="activeTab === 'auth' ? 'bg-indigo-600 text-white border-b-2 border-indigo-400' : 'hover:bg-surface-2'"
+                  class="px-3 sm:px-4 py-2.5 text-[10px] sm:text-xs font-mono rounded-none transition-colors font-semibold whitespace-nowrap flex-shrink-0"
+                  style="color: var(--text-muted)">
             1. POST /auth/token/
           </button>
-          <button @click="activeTab = 'workspace'" :class="activeTab === 'workspace' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+          <button @click="activeTab = 'workspace'" :class="activeTab === 'workspace' ? 'bg-indigo-600 text-white border-b-2 border-indigo-400' : 'hover:bg-surface-2'"
+                  class="px-3 sm:px-4 py-2.5 text-[10px] sm:text-xs font-mono rounded-none transition-colors font-semibold whitespace-nowrap flex-shrink-0"
+                  style="color: var(--text-muted)">
             2. POST /workspaces/
           </button>
-          <button @click="activeTab = 'apikey'" :class="activeTab === 'apikey' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+          <button @click="activeTab = 'apikey'" :class="activeTab === 'apikey' ? 'bg-indigo-600 text-white border-b-2 border-indigo-400' : 'hover:bg-surface-2'"
+                  class="px-3 sm:px-4 py-2.5 text-[10px] sm:text-xs font-mono rounded-none transition-colors font-semibold whitespace-nowrap flex-shrink-0"
+                  style="color: var(--text-muted)">
             3. POST /billing/api-keys/
           </button>
-          <button @click="activeTab = 'ai'" :class="activeTab === 'ai' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'" class="px-4 py-2 text-xs font-mono rounded-lg transition-colors font-semibold">
+          <button @click="activeTab = 'ai'" :class="activeTab === 'ai' ? 'bg-indigo-600 text-white border-b-2 border-indigo-400' : 'hover:bg-surface-2'"
+                  class="px-3 sm:px-4 py-2.5 text-[10px] sm:text-xs font-mono rounded-none transition-colors font-semibold whitespace-nowrap flex-shrink-0"
+                  style="color: var(--text-muted)">
             4. POST /ai/generate/
           </button>
         </div>
 
-        <div class="p-6 font-mono text-xs text-slate-300">
-          
-          <!-- Tab 1 -->
-          <div x-show="activeTab === 'auth'" x-cloak class="space-y-4">
-            <p class="text-slate-400 font-sans">Obtain stateless access and refresh JWT tokens using email identifier.</p>
-            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-emerald-400 overflow-x-auto">
-curl -X POST http://127.0.0.1:8000/api/v1/auth/token/ \
+        <div class="p-4 sm:p-6 font-mono text-xs" style="color: var(--text-secondary)">
+          <div x-show="activeTab === 'auth'" x-cloak class="space-y-3">
+            <p class="font-sans text-xs sm:text-sm" style="color: var(--text-muted)">Obtain stateless access and refresh JWT tokens using email identifier.</p>
+            <pre class="p-3 sm:p-4 rounded-xl border text-emerald-400 overflow-x-auto text-[10px] sm:text-xs leading-relaxed" style="background: var(--bg-surface-0); border-color: var(--border-color)">curl -X POST http://127.0.0.1:8000/api/v1/auth/token/ \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@smartops.com",
     "password": "AdminPass123!"
   }'</pre>
           </div>
-
-          <!-- Tab 2 -->
-          <div x-show="activeTab === 'workspace'" x-cloak class="space-y-4">
-            <p class="text-slate-400 font-sans">Create a new isolated Workspace (tenant). Initiator is automatically set as 'Owner'.</p>
-            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-indigo-300 overflow-x-auto">
-curl -X POST http://127.0.0.1:8000/api/v1/workspaces/ \
+          <div x-show="activeTab === 'workspace'" x-cloak class="space-y-3">
+            <p class="font-sans text-xs sm:text-sm" style="color: var(--text-muted)">Create a new isolated Workspace (tenant). Initiator is automatically set as 'Owner'.</p>
+            <pre class="p-3 sm:p-4 rounded-xl border text-indigo-300 overflow-x-auto text-[10px] sm:text-xs leading-relaxed" style="background: var(--bg-surface-0); border-color: var(--border-color)">curl -X POST http://127.0.0.1:8000/api/v1/workspaces/ \
   -H "Authorization: Bearer &lt;access_token&gt;" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Acme Global Enterprise"
   }'</pre>
           </div>
-
-          <!-- Tab 3 -->
-          <div x-show="activeTab === 'apikey'" x-cloak class="space-y-4">
-            <p class="text-slate-400 font-sans">Generate cryptographically hashed API keys scoped to the target workspace header.</p>
-            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-purple-300 overflow-x-auto">
-curl -X POST http://127.0.0.1:8000/api/v1/billing/api-keys/ \
+          <div x-show="activeTab === 'apikey'" x-cloak class="space-y-3">
+            <p class="font-sans text-xs sm:text-sm" style="color: var(--text-muted)">Generate cryptographically hashed API keys scoped to the target workspace header.</p>
+            <pre class="p-3 sm:p-4 rounded-xl border text-purple-300 overflow-x-auto text-[10px] sm:text-xs leading-relaxed" style="background: var(--bg-surface-0); border-color: var(--border-color)">curl -X POST http://127.0.0.1:8000/api/v1/billing/api-keys/ \
   -H "Authorization: Bearer &lt;access_token&gt;" \
   -H "X-Workspace-ID: &lt;workspace_id&gt;" \
   -H "Content-Type: application/json" \
@@ -545,126 +606,121 @@ curl -X POST http://127.0.0.1:8000/api/v1/billing/api-keys/ \
     "name": "Production AI Pipeline Key"
   }'</pre>
           </div>
-
-          <!-- Tab 4 -->
-          <div x-show="activeTab === 'ai'" x-cloak class="space-y-4">
-            <p class="text-slate-400 font-sans">Trigger asynchronous LLM task generation. Returns instant 202 Accepted with Celery task ID.</p>
-            <pre class="bg-surface-0 p-4 rounded-lg border border-surface-border text-amber-300 overflow-x-auto">
-curl -X POST http://127.0.0.1:8000/api/v1/ai/generate/ \
+          <div x-show="activeTab === 'ai'" x-cloak class="space-y-3">
+            <p class="font-sans text-xs sm:text-sm" style="color: var(--text-muted)">Trigger asynchronous LLM task generation. Returns instant 202 Accepted with Celery task ID.</p>
+            <pre class="p-3 sm:p-4 rounded-xl border text-amber-300 overflow-x-auto text-[10px] sm:text-xs leading-relaxed" style="background: var(--bg-surface-0); border-color: var(--border-color)">curl -X POST http://127.0.0.1:8000/api/v1/ai/generate/ \
   -H "Authorization: Bearer &lt;access_token&gt;" \
   -H "X-Workspace-ID: &lt;workspace_id&gt;" \
   -H "Content-Type: application/json" \
   -d '{
-    "prompt": "Summarize Q3 telemetry reports and risk metrics.",
+    "prompt": "Summarize Q3 telemetry reports.",
     "model": "gpt-4o"
   }'</pre>
           </div>
-
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- ── 8. Security & Compliance ────────────────────────────────────── -->
-  <section id="security" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <!-- ── 8. Security & Compliance ─────────────────────────────────────── -->
+  <section id="security" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
-    <div class="text-center mb-16">
+    <div class="text-center mb-10 sm:mb-16">
       <span class="text-[11px] font-mono uppercase tracking-widest text-red-400 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20">OWASP Compliance</span>
-      <h2 class="text-3xl font-bold text-white mt-3">Security Controls</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold mt-3" style="color: var(--text-primary)">Security Controls</h2>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-      <div class="card-surface p-5 rounded-xl border-l-2 border-red-500">
-        <h4 class="text-xs font-bold text-white uppercase font-mono">PBKDF2 Key Hashing</h4>
-        <p class="text-xs text-slate-400 mt-2">API keys are hashed using PBKDF2-SHA256. Raw secrets are never stored in plaintext.</p>
+      <div class="card-surface p-5 rounded-xl border-l-4 border-red-500">
+        <h4 class="text-xs font-bold uppercase font-mono" style="color: var(--text-primary)">PBKDF2 Key Hashing</h4>
+        <p class="text-xs mt-2" style="color: var(--text-muted)">API keys are hashed using PBKDF2-SHA256. Raw secrets are never stored in plaintext.</p>
       </div>
 
-      <div class="card-surface p-5 rounded-xl border-l-2 border-indigo-500">
-        <h4 class="text-xs font-bold text-white uppercase font-mono">DRF Rate Throttling</h4>
-        <p class="text-xs text-slate-400 mt-2">Anon (20/min) and User (200/min) rate limits prevent brute-force attacks.</p>
+      <div class="card-surface p-5 rounded-xl border-l-4 border-indigo-500">
+        <h4 class="text-xs font-bold uppercase font-mono" style="color: var(--text-primary)">DRF Rate Throttling</h4>
+        <p class="text-xs mt-2" style="color: var(--text-muted)">Anon (20/min) and User (200/min) rate limits prevent brute-force attacks.</p>
       </div>
 
-      <div class="card-surface p-5 rounded-xl border-l-2 border-emerald-500">
-        <h4 class="text-xs font-bold text-white uppercase font-mono">Strict HTTP Headers</h4>
-        <p class="text-xs text-slate-400 mt-2">Enforces X-Frame-Options DENY, X-Content-Type-Options nosniff, and Referrer-Policy.</p>
+      <div class="card-surface p-5 rounded-xl border-l-4 border-emerald-500">
+        <h4 class="text-xs font-bold uppercase font-mono" style="color: var(--text-primary)">Strict HTTP Headers</h4>
+        <p class="text-xs mt-2" style="color: var(--text-muted)">Enforces X-Frame-Options DENY, X-Content-Type-Options nosniff, and Referrer-Policy.</p>
       </div>
 
-      <div class="card-surface p-5 rounded-xl border-l-2 border-purple-500">
-        <h4 class="text-xs font-bold text-white uppercase font-mono">UUID Obfuscation</h4>
-        <p class="text-xs text-slate-400 mt-2">All primary keys leverage UUIDv4, eliminating horizontal enumeration risks.</p>
+      <div class="card-surface p-5 rounded-xl border-l-4 border-purple-500">
+        <h4 class="text-xs font-bold uppercase font-mono" style="color: var(--text-primary)">UUID Obfuscation</h4>
+        <p class="text-xs mt-2" style="color: var(--text-muted)">All primary keys leverage UUIDv4, eliminating horizontal enumeration risks.</p>
       </div>
 
     </div>
 
   </section>
 
-  <!-- ── 9. Development Roadmap Timeline ─────────────────────────────── -->
-  <section id="roadmap" class="py-20 border-t border-surface-border bg-surface-1/40">
+  <!-- ── 9. Development Roadmap ──────────────────────────────────────── -->
+  <section id="roadmap" class="py-14 sm:py-20 border-t" style="border-color: var(--border-color); background: var(--bg-surface-1);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="text-center mb-16">
+      <div class="text-center mb-10 sm:mb-16">
         <span class="text-[11px] font-mono uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Progress Milestone</span>
-        <h2 class="text-3xl font-bold text-white mt-3">Development Roadmap</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold mt-3" style="color: var(--text-primary)">Development Roadmap</h2>
       </div>
 
-      <div class="max-w-3xl mx-auto space-y-4">
+      <div class="max-w-3xl mx-auto space-y-3">
 
-        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">1</span>
-            <div>
-              <h4 class="text-xs font-bold text-white">Phase 1: Multi-Tenant Architecture &amp; Custom Models</h4>
-              <p class="text-[11px] text-slate-400 font-mono">UUID User Model, Organization RBAC, TenantMiddleware</p>
+        {% for phase in roadmap_phases %}
+        <div class="card-surface p-4 rounded-xl flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="w-7 h-7 rounded-full {{ phase.bg }} flex items-center justify-center font-mono text-xs font-bold flex-shrink-0 {{ phase.color }}">{{ forloop.counter }}</span>
+            <div class="min-w-0">
+              <h4 class="text-xs font-bold truncate" style="color: var(--text-primary)">{{ phase.title }}</h4>
+              <p class="text-[11px] font-mono truncate" style="color: var(--text-muted)">{{ phase.sub }}</p>
             </div>
           </div>
-          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+          <span class="flex-shrink-0 px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-semibold {{ phase.badge_class }}">{{ phase.status }}</span>
         </div>
-
-        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
+        {% empty %}
+        <div class="card-surface p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">2</span>
-            <div>
-              <h4 class="text-xs font-bold text-white">Phase 2: DRF REST API Layer &amp; Programmatic API Keys</h4>
-              <p class="text-[11px] text-slate-400 font-mono">SimpleJWT Auth, Workspace CRUD, API Key Manager</p>
-            </div>
+            <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold flex-shrink-0">1</span>
+            <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Phase 1: Multi-Tenant Architecture &amp; Custom Models</h4>
+            <p class="text-[11px] font-mono" style="color: var(--text-muted)">UUID User Model, Organization RBAC, TenantMiddleware</p></div>
           </div>
-          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+          <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold whitespace-nowrap">COMPLETED</span>
         </div>
-
-        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
+        <div class="card-surface p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">3</span>
-            <div>
-              <h4 class="text-xs font-bold text-white">Phase 3: Celery + Redis Async AI Integration</h4>
-              <p class="text-[11px] text-slate-400 font-mono">LLM Service Facade, AIRequestLog, 202 Async Tasks</p>
-            </div>
+            <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold flex-shrink-0">2</span>
+            <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Phase 2: DRF REST API Layer &amp; Programmatic API Keys</h4>
+            <p class="text-[11px] font-mono" style="color: var(--text-muted)">SimpleJWT Auth, Workspace CRUD, API Key Manager</p></div>
           </div>
-          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+          <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold whitespace-nowrap">COMPLETED</span>
         </div>
-
-        <div class="card-surface p-4 rounded-xl flex items-center justify-between">
+        <div class="card-surface p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">4</span>
-            <div>
-              <h4 class="text-xs font-bold text-white">Phase 4: django-unfold Admin &amp; Client Web UI</h4>
-              <p class="text-[11px] text-slate-400 font-mono">KPI Callbacks, Tailwind + Alpine Web Dashboard</p>
-            </div>
+            <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold flex-shrink-0">3</span>
+            <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Phase 3: Celery + Redis Async AI Integration</h4>
+            <p class="text-[11px] font-mono" style="color: var(--text-muted)">LLM Service Facade, AIRequestLog, 202 Async Tasks</p></div>
           </div>
-          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold">COMPLETED</span>
+          <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold whitespace-nowrap">COMPLETED</span>
         </div>
-
-        <div class="card-surface p-4 rounded-xl flex items-center justify-between border-indigo-500/30">
+        <div class="card-surface p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono text-xs font-bold">5</span>
-            <div>
-              <h4 class="text-xs font-bold text-white">Phase 5: Cloud Deployment &amp; Production Hardening</h4>
-              <p class="text-[11px] text-slate-400 font-mono">HTTPS SSL, Gunicorn, PostgreSQL, Security Audit</p>
-            </div>
+            <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold flex-shrink-0">4</span>
+            <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Phase 4: django-unfold Admin &amp; Client Web UI</h4>
+            <p class="text-[11px] font-mono" style="color: var(--text-muted)">KPI Callbacks, Tailwind + Alpine Web Dashboard</p></div>
           </div>
-          <span class="px-2.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-mono font-semibold">NEXT PHASE</span>
+          <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-semibold whitespace-nowrap">COMPLETED</span>
         </div>
+        <div class="card-surface p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border border-indigo-500/20">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono text-xs font-bold flex-shrink-0">5</span>
+            <div><h4 class="text-xs font-bold" style="color: var(--text-primary)">Phase 5: Cloud Deployment &amp; Production Hardening</h4>
+            <p class="text-[11px] font-mono" style="color: var(--text-muted)">HTTPS SSL, Gunicorn, PostgreSQL, Security Audit</p></div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-mono font-semibold whitespace-nowrap">NEXT PHASE</span>
+        </div>
+        {% endfor %}
 
       </div>
 
@@ -672,16 +728,16 @@ curl -X POST http://127.0.0.1:8000/api/v1/ai/generate/ \
   </section>
 
   <!-- ── Footer ──────────────────────────────────────────────────────── -->
-  <footer class="mt-auto border-t border-surface-border py-8 px-4 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+  <footer class="mt-auto border-t py-8 px-4" style="border-color: var(--border-color)">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        <span class="font-mono text-slate-400">SmartOps B2B Engine &bull; Architected by Zeeshan Shabbir Qureshi</span>
+        <span class="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0"></span>
+        <span class="font-mono text-xs" style="color: var(--text-muted)">SmartOps B2B Engine &bull; Architected by Zeeshan Shabbir Qureshi</span>
       </div>
-      <div class="flex items-center gap-6">
-        <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" class="hover:text-emerald-400 font-medium">Demo Credentials File</a>
-        <a href="/admin/" class="hover:text-slate-300 font-medium">Django Unfold Admin</a>
-        <a href="/dashboard/" class="hover:text-slate-300 font-medium">Client Dashboard</a>
+      <div class="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
+        <a href="{% url 'dashboard:demo-credentials' %}" target="_blank" class="text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors">Demo Credentials</a>
+        <a href="/admin/" class="text-xs font-medium hover:text-indigo-400 transition-colors" style="color: var(--text-muted)">Unfold Admin</a>
+        <a href="/dashboard/" class="text-xs font-medium hover:text-indigo-400 transition-colors" style="color: var(--text-muted)">Client Dashboard</a>
       </div>
     </div>
   </footer>

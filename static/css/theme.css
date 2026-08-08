@@ -5,7 +5,11 @@
 
 [x-cloak] { display: none !important; }
 
-/* ═══════════════════════════════════════════════════════════════
+/* Hide scrollbar on scroll-containers (mobile API tabs) */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+
    DARK THEME (default — Obsidian/Linear aesthetic)
 ═══════════════════════════════════════════════════════════════ */
 html, html.dark {
