@@ -143,6 +143,65 @@
 
           <!-- Authorized & Relevant Actions -->
           <div class="flex items-center gap-2.5">
+            <!-- Theme Switcher Dropdown -->
+            <div x-data="themeManager()" class="relative">
+              <button
+                @click="themeDropdownOpen = !themeDropdownOpen"
+                class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white bg-surface-2 border border-surface-border transition-all flex items-center gap-1.5 text-xs font-mono"
+                title="Switch Theme (Light, Dark, System)"
+              >
+                <template x-if="mode === 'light'">
+                  <span class="material-symbols-outlined text-[15px] text-amber-400">light_mode</span>
+                </template>
+                <template x-if="mode === 'dark'">
+                  <span class="material-symbols-outlined text-[15px] text-indigo-400">dark_mode</span>
+                </template>
+                <template x-if="mode === 'system'">
+                  <span class="material-symbols-outlined text-[15px] text-emerald-400">desktop_windows</span>
+                </template>
+                <span class="capitalize text-[11px] font-medium hidden md:inline" x-text="mode"></span>
+                <span class="material-symbols-outlined text-[14px] opacity-60">expand_more</span>
+              </button>
+
+              <div
+                x-show="themeDropdownOpen"
+                @click.away="themeDropdownOpen = false"
+                x-cloak
+                x-transition:enter="transition ease-out duration-100"
+                x-transition:enter-start="transform opacity-0 scale-95"
+                x-transition:enter-end="transform opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="transform opacity-100 scale-100"
+                x-transition:leave-end="transform opacity-0 scale-95"
+                class="absolute right-0 mt-2 w-36 rounded-xl bg-surface-1 border border-surface-border shadow-xl z-50 p-1 space-y-0.5 text-xs font-mono"
+              >
+                <button
+                  @click="setTheme('light'); themeDropdownOpen = false"
+                  :class="mode === 'light' ? 'bg-amber-500/10 text-amber-400 font-bold' : 'text-slate-300 hover:bg-surface-2'"
+                  class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left"
+                >
+                  <span class="material-symbols-outlined text-[15px] text-amber-400">light_mode</span>
+                  <span>Light</span>
+                </button>
+                <button
+                  @click="setTheme('dark'); themeDropdownOpen = false"
+                  :class="mode === 'dark' ? 'bg-indigo-500/10 text-indigo-400 font-bold' : 'text-slate-300 hover:bg-surface-2'"
+                  class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left"
+                >
+                  <span class="material-symbols-outlined text-[15px] text-indigo-400">dark_mode</span>
+                  <span>Dark</span>
+                </button>
+                <button
+                  @click="setTheme('system'); themeDropdownOpen = false"
+                  :class="mode === 'system' ? 'bg-emerald-500/10 text-emerald-400 font-bold' : 'text-slate-300 hover:bg-surface-2'"
+                  class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left"
+                >
+                  <span class="material-symbols-outlined text-[15px] text-emerald-400">desktop_windows</span>
+                  <span>System</span>
+                </button>
+              </div>
+            </div>
+
             <a href="/" target="_blank"
                class="px-2.5 py-1 text-xs font-medium text-slate-400 hover:text-white bg-surface-2 rounded border border-surface-border transition-colors flex items-center gap-1">
               <span class="material-symbols-outlined text-[14px]">home</span>
