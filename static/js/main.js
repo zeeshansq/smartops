@@ -1,6 +1,6 @@
 /**
  * SmartOps Platform — Interactive Client Application JS
- * Handles theme switching (Dark, Light, System), UI events, sidebar toggles, and clipboard actions.
+ * Handles theme switching (Dark default, Light, System), UI events, sidebar toggles.
  */
 
 // Global Theme Application Helper
@@ -15,15 +15,16 @@ window.applySmartOpsTheme = function(mode) {
   }
 };
 
-// Immediate Theme Initialization (prevents flash of unstyled content)
+// Immediate Theme Initialization — DEFAULT IS DARK
 (function initSmartOpsTheme() {
-  const savedTheme = localStorage.getItem('smartops-theme') || 'system';
+  // First visit defaults to 'dark'; returning visits use stored preference
+  const savedTheme = localStorage.getItem('smartops-theme') || 'dark';
   window.applySmartOpsTheme(savedTheme);
 })();
 
-// Listen for system theme preference changes dynamically
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-  const savedTheme = localStorage.getItem('smartops-theme') || 'system';
+// Listen for OS-level system theme preference changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  const savedTheme = localStorage.getItem('smartops-theme') || 'dark';
   if (savedTheme === 'system') {
     window.applySmartOpsTheme('system');
   }
@@ -32,7 +33,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 // Global Theme Manager for Alpine.js x-data="themeManager()"
 window.themeManager = function() {
   return {
-    mode: localStorage.getItem('smartops-theme') || 'system',
+    mode: localStorage.getItem('smartops-theme') || 'dark',
     themeDropdownOpen: false,
 
     setTheme(newMode) {
@@ -43,7 +44,7 @@ window.themeManager = function() {
   };
 };
 
-// Register with Alpine.data if alpine:init hasn't fired yet
+// Register with Alpine.data on alpine:init as well
 document.addEventListener('alpine:init', () => {
   if (window.Alpine) {
     Alpine.data('themeManager', window.themeManager);
@@ -56,19 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
     anchor.addEventListener('click', function (e) {
       const targetId = this.getAttribute('href');
       if (targetId === '#') return;
-      
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         e.preventDefault();
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   });
 
-  // Global keyboard shortcuts (e.g. Esc to close mobile sidebar)
+  // Global keyboard shortcuts
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       const sidebarToggle = document.getElementById('sidebar-toggle');

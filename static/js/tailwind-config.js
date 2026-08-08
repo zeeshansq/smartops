@@ -1,6 +1,6 @@
 /**
  * SmartOps Platform — Tailwind CSS CDN Configuration
- * Configures modern surface color tokens, typography fonts, and keyframes.
+ * Configures dark/light mode class strategy, modern surface color tokens, typography fonts, and keyframes.
  */
 tailwind.config = {
   darkMode: 'class',
@@ -12,13 +12,13 @@ tailwind.config = {
       },
       colors: {
         surface: {
-          0: '#07090e',
-          1: '#0e131f',
-          2: '#141b2d',
-          border: '#1f293d',
+          0: 'var(--bg-surface-0)',
+          1: 'var(--bg-surface-1)',
+          2: 'var(--bg-surface-2)',
+          border: 'var(--border-color)',
         },
         brand: {
-          50: '#eef2ff',
+          50:  '#eef2ff',
           100: '#e0e7ff',
           400: '#818cf8',
           500: '#6366f1',
@@ -29,12 +29,12 @@ tailwind.config = {
         }
       },
       animation: {
-        'fade-in': 'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in':   'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        'slide-up':  'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        'pulse-slow':'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
-        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+        fadeIn:  { '0%': { opacity: '0' },                                          '100%': { opacity: '1' } },
         slideUp: { '0%': { transform: 'translateY(12px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
       }
     }
