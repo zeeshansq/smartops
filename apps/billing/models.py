@@ -98,6 +98,7 @@ class APIKey(models.Model):
     objects = APIKeyManager()
 
     class Meta:
+        app_label = 'billing'
         verbose_name = 'API Key'
         verbose_name_plural = 'API Keys'
         ordering = ['-created_at']

@@ -446,3 +446,9 @@ CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes hard time limit
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/dashboard/login/'
 
+# ---------------------------------------------------------------------------
+# Test Runner
+# ---------------------------------------------------------------------------
+TEST_RUNNER = 'config.runner.SmartOpsTestRunner'
+
+

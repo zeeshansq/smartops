@@ -38,6 +38,7 @@ class Organization(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        app_label = 'organizations'
         verbose_name = 'Organization'
         verbose_name_plural = 'Organizations'
         ordering = ['name']
@@ -101,6 +102,7 @@ class OrganizationMember(models.Model):
     joined_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        app_label = 'organizations'
         verbose_name = 'Organization Member'
         verbose_name_plural = 'Organization Members'
         unique_together = ('organization', 'user')

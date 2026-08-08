@@ -118,6 +118,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     class Meta:
+        app_label = 'authentication'
         verbose_name = 'User'
         verbose_name_plural = 'Users'
         indexes = [

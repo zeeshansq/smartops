@@ -89,6 +89,7 @@ class AIRequestLog(models.Model):
     )
 
     class Meta:
+        app_label = 'ai_services'
         verbose_name = 'AI Request Log'
         verbose_name_plural = 'AI Request Logs'
         ordering = ['-created_at']
