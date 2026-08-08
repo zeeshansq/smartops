@@ -1,0 +1,59 @@
+[Unit]
+Description=SmartOps — Gunicorn ASGI Application Server
+Documentation=https://docs.gunicorn.org
+After=network.target postgresql.service redis-server.service
+Wants=postgresql.service redis-server.service
+
+[Service]
+Type=notify
+
+# ---------------------------------------------------------------------------
+# Identity — run as a dedicated, unprivileged system user
+# ---------------------------------------------------------------------------
+User=smartops
+Group=smartops
+
+# ---------------------------------------------------------------------------
+# Environment
+# ---------------------------------------------------------------------------
+WorkingDirectory=/var/www/smartops
+EnvironmentFile=/var/www/smartops/.env
+
+# The runtime socket directory is created transiently by systemd
+RuntimeDirectory=gunicorn
+RuntimeDirectoryMode=0755
+
+# ---------------------------------------------------------------------------
+# Process
+# ---------------------------------------------------------------------------
+ExecStart=/var/www/smartops/.venv/bin/gunicorn \
+    --config /var/www/smartops/config/gunicorn_config.py \
+    config.asgi:application
+
+ExecReload=/bin/kill -s HUP $MAINPID
+
+# ---------------------------------------------------------------------------
+# Reliability
+# ---------------------------------------------------------------------------
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# ---------------------------------------------------------------------------
+# Security Hardening (systemd namespacing)
+# ---------------------------------------------------------------------------
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/www/smartops /run/gunicorn /var/log/smartops
+ProtectHome=true
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,5 +1,5 @@
 # ==========================================
-# CORE FRAMEWORK & APPS (WINDOWS ONLY)
+# CORE FRAMEWORK & APPS
 # ==========================================
 Django~=5.2.0
 djangorestframework==3.15.*
@@ -8,15 +8,19 @@ django-unfold==0.34.*
 django-environ>=0.11.2
 
 # ==========================================
-# DATABASE, CACHE, & BACKGROUND TASKS
+# DATABASE, CACHE & BACKGROUND TASKS
 # ==========================================
-# Using the updated 3.3.* branch which contains modern Python Windows wheels
 psycopg[binary]==3.3.*
-
 celery==5.4.*
 redis==5.0.*
 
 # ==========================================
+# PRODUCTION APPLICATION SERVER
+# ==========================================
+gunicorn>=22.0.0
+uvicorn[standard]>=0.30.0       # UvicornWorker for ASGI support
+
+# ==========================================
 # TESTING & DUMMY DATA
 # ==========================================
-faker>=30.0.0
+faker>=30.0.0
