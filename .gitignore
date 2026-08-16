@@ -39,6 +39,8 @@ envops/
 # ── Django Secrets & Environment (.env) ──────────────────────
 # NEVER commit secret keys, passwords, or live environment files
 .env
+.env.production
+production.env
 *.env
 !.env.example
 

@@ -20,6 +20,7 @@ env = environ.Env(
     DEBUG=(bool, False),                                # Safe default: never debug in prod
     IS_PRODUCTION=(bool, False),
     ALLOWED_HOSTS=(list, ['127.0.0.1', 'localhost']),
+    CSRF_TRUSTED_ORIGINS=(list, []),
     INTERNAL_IPS=(list, ['127.0.0.1']),
     CONN_MAX_AGE=(int, 60),
     THROTTLE_RATE_ANON=(str, '20/min'),
@@ -40,6 +41,7 @@ DEBUG = env('DEBUG')
 IS_PRODUCTION = env('IS_PRODUCTION')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
 INTERNAL_IPS = env('INTERNAL_IPS')
 
 
