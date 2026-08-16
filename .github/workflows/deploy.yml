@@ -24,6 +24,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Django Tests
+        env:
+          SECRET_KEY: 'django-insecure-ci-testing-key-smartops-test-suite-2026'
+          DEBUG: 'True'
+          IS_PRODUCTION: 'False'
         run: |
           python manage.py test
 
